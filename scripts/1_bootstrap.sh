@@ -27,7 +27,7 @@ if [ ! -f "$BASEDIR/.env/updated" -o $BASEDIR/requirements.pip -nt $BASEDIR/.env
 fi
 
 # Sets up the database tables & roles
-	sudo su - postgres
+	echo '$DATABASE_ROOT_PASSWORD' | sudo su - postgres
 	psql
 	CREATE DATABASE $APP_NAME;
 	CREATE USER $APP_NAME WITH PASSWORD '$DATABASE_USER_PASSWORD';
