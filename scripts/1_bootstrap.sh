@@ -42,7 +42,7 @@ fi
 
 	service postgresql reload
 
-	cd $BASEDIR/web/$APP_NAME
+	cd $BASEDIR/web
 
 	source $BASEDIR/.env/bin/activate
 	python manage.py makemigrations
