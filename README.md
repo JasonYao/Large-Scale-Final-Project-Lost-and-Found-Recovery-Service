@@ -1,10 +1,11 @@
 # Lost & Found Recovery Service
 
-By Daniel Balagula, Chisom Mba, Avash Rao, Jason Yao
+By Daniel Balagula, Chisom Mba, Avash Rao, and Jason Yao
 
 ## Description
 
-This repository is to contain all planning documents, the development pipeline setup scripts, along with the actual codebase for our application.
+This repository is for our final project in CSCI-UA 480 Large Scalability, and is to contain all planning documents, 
+the development pipeline setup scripts, along with the actual codebase for our application.
 
 The application implements an anonymous lost & found service, where:
 
@@ -16,13 +17,11 @@ The application implements an anonymous lost & found service, where:
 
 - If the object is lost & recovered, QR code can be scanned
 
-	- application will be notified of event & who recovering party was
+	- Application will be notified of event & who recovering party was
 
-	- Application will coordinate return of the lost item (simulated)
+	- Application will co-ordinate return of the lost item (simulated)
 
 ## Goals
-
-Our final project in CSCI-UA 480 Large Scalability, in which our goals are to:
 
 - Create a full-fledged scalable web application
 
@@ -30,7 +29,17 @@ Our final project in CSCI-UA 480 Large Scalability, in which our goals are to:
 
 ## Technology Stack
 
-TODO update with full decided technology stack
+Tech Stack Design (metal up):
+ 
+	[Operating System]		TBD
+
+	[Load Balancer]			TBD
+
+	[Application Server]	TBD
+
+	[Application Framework]	Django
+
+	[Relational Database]	PostgreSQL
 
 ## License
 
