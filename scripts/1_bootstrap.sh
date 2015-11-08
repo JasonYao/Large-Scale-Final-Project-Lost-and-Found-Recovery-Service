@@ -27,6 +27,7 @@ if [ ! -f "$BASEDIR/.env/updated" -o $BASEDIR/requirements.pip -nt $BASEDIR/.env
 fi
 
 # Sets up the database tables & roles
+	echo 'Setting up database tables, roles, users & migrations'
 	echo '$DATABASE_ROOT_PASSWORD' | sudo su - postgres
 	psql
 	CREATE DATABASE $APP_NAME;
@@ -51,6 +52,9 @@ fi
 
 	chown -R ubuntu:ubuntu $BASEDIR
 	chown ubuntu:ubuntu /tmp/db.debug.log
+
+# Final reminders
+	echo 'Please remember to CHANGE THE APP PASSWORD in web/$APP_NAME/settings.py'
 
 ## Start the dev server
 # python manage.py runserver 0.0.0.0:8000
