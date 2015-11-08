@@ -46,8 +46,12 @@ fi
 	cd $BASEDIR/web
 
 	source $BASEDIR/.env/bin/activate
+	# Creates & populates tables
 	python manage.py makemigrations
 	python manage.py migrate
+
+	# Creates administrative accounts for django
+    python manage.py createsuperuser
 	deactivate
 
 	chown -R ubuntu:ubuntu $BASEDIR
