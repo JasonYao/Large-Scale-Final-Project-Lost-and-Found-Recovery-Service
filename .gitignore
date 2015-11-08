@@ -55,3 +55,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# OSX-specific ignores
+.DS_Store
