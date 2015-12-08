@@ -1,0 +1,17 @@
+##
+# finder's Server blocks
+##
+
+server {
+	listen 80 default_server;
+	listen [::]:80 ipv6only=on;
+
+	root /usr/share/nginx/html/;
+	index index.html;
+
+	server_name localhost;
+
+	##### Implements Caching #####
+	location ~* .(png|ico|css|js|jpg|gif)$ {expires 1M;}
+
+} # End of the HTTP block
