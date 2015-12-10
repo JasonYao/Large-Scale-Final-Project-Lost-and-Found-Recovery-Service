@@ -5,5 +5,11 @@
 {% block content %}
 <div>
   <p>Welcome to your profile {{ user.username }}</p>
+
+  <ul>
+  	{% for item in items %}
+  	<li>{{ item.name }}</li>
+  	{% endfor %}
+  </ul>
 </div>
 {% endblock %}

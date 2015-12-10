@@ -1,7 +1,7 @@
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from qrcode.models import FinderUser
+from qrcode.models import Item, FinderUser
 from qrcode.forms import CustomUserCreationForm, ItemForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -51,9 +51,11 @@ def profile(request):
 	'''List of recent posts by people I follow'''
 
 	user = request.user
+	items = Item.objects.filter(user_id=user.id)
 
 	context = {
 		'user': user,
+		'items': items,
 	}
 	return render(request, 'qrcode/profile.html', context)
 
@@ -78,7 +80,13 @@ def add_item(request):
 	if request.method == 'POST':
 		form = ItemForm(request.POST)
 
-		
+		if form.is_valid():
+			new_item = form.save(commit=False)
+    		new_item.user_id = request.user.id
+    		
+    		new_item.save()
+
+    		return HttpResponseRedirect(reverse('qrcode:profile', args=()))
 	else:
 		form = ItemForm
 
