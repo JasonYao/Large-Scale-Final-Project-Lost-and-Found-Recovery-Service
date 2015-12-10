@@ -14,4 +14,19 @@ server {
 	##### Implements Caching #####
 	location ~* .(png|ico|css|js|jpg|gif)$ {expires 1M;}
 
+	# Serves static files from the finder application
+	location /static/ {
+        root /finder/web/finder;
+    }
+
+	# Actually serves through the uwsgi protocol via a unix socket
+	location / {
+		include         uwsgi_params;
+
+		# Sets the socket to a unix socket (currently broken, using web socket instead)
+#        uwsgi_pass      unix:/tmp/finder.sock;
+
+		# Sets the socket to a websocket (slower, but at least it works)
+		uwsgi_pass	127.0.0.1:3031;
+    }
 } # End of the HTTP block
