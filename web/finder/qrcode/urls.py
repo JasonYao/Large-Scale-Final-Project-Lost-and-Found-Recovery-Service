@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^$', views.index, name='home'),
     url(r'^register/$', views.register, name='register'),
     url(r'^profile/$', views.profile, name='profile'),
-    url(r'^items/(?P<item_id>[0-9]+)/$', views.item, name='item'),
+    url(r'^items/(?P<user_id>[0-9]+)/(?P<item_id>[0-9]+)/$', views.item, name='item'),
+    url(r'^add/$', views.add_item, name='item_add'),
     url('^', include('django.contrib.auth.urls')),
 ]

@@ -1,6 +1,8 @@
 from django import forms
+from django.forms import ModelForm, TextInput
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from qrcode.models import Item
 
 class CustomUserCreationForm(UserCreationForm):
 	email = forms.EmailField(required=True) # include the email field
@@ -25,3 +27,12 @@ class CustomUserCreationForm(UserCreationForm):
 		if commit:
 			user.save()
 		return user
+
+class ItemForm(ModelForm):
+  class Meta:
+    model = Item
+    fields = ('name',)
+    widgets = {
+      'name': TextInput(attrs={'id' : 'input_item'}),
+    }
+

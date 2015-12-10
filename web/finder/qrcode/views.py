@@ -2,7 +2,7 @@ from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from qrcode.models import FinderUser
-from qrcode.forms import CustomUserCreationForm
+from qrcode.forms import CustomUserCreationForm, ItemForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
@@ -57,15 +57,33 @@ def profile(request):
 	}
 	return render(request, 'qrcode/profile.html', context)
 
-@login_required
-def item(request, item_id):
+def item(request, user_id, item_id):
 	'''List of recent posts by people I follow'''
 
-	user = request.user
-	item = item_id # will be replaced with a model
+	user = FinderUser.objects.get(user_id=user_id)
+	item = Item.objects.get(item_id=item_id)
 
 	context = {
 		'user': user,
 		'item': item,
 	}
 	return render(request, 'qrcode/item.html', context)
+
+@login_required
+def add_item(request):
+	'''List of recent posts by people I follow'''
+
+	user = request.user
+
+	if request.method == 'POST':
+		form = ItemForm(request.POST)
+
+		
+	else:
+		form = ItemForm
+
+	context = {
+		'user': user,
+		'form': form,
+	}
+	return render(request, 'qrcode/item_add.html', context)

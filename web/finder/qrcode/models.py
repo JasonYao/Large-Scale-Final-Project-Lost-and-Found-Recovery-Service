@@ -10,4 +10,5 @@ class FinderUser(models.Model):
 
 class Item(models.Model):
 	user_id = models.BigIntegerField(db_index=True)
+	item_id = models.BigIntegerField(db_index=True)
   	name = models.CharField(max_length=256)
