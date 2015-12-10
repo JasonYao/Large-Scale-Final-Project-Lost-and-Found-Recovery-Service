@@ -1,6 +1,7 @@
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from qrcode.models import FinderUser
 from qrcode.forms import CustomUserCreationForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -21,6 +22,11 @@ def register(request):
 
 		if form.is_valid():
 			new_user = form.save(commit=True)
+			# Create a mirror sharded User model.
+			u = FinderUser(
+				user_id=new_user.id, username=new_user.username, 
+				email=new_user.email)
+			u.save()
 			# Log in that user.
 			user = authenticate(username=new_user.username,
 				password=form.clean_password2())

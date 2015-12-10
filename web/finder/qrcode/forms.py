@@ -12,6 +12,13 @@ class CustomUserCreationForm(UserCreationForm):
 			'username' : '',
 		}
 
+	def clean_email(self):
+		email = self.cleaned_data['email']
+		username = self.cleaned_data['username']
+		if email and User.objects.filter(email=email).exclude(username=username).count():
+			raise forms.ValidationError(u'Email addresses must be unique.')
+		return email
+
 	def save(self, commit=True):
 		user = super(CustomUserCreationForm, self).save(commit=False)
 		user.email = self.cleaned_data["email"]
