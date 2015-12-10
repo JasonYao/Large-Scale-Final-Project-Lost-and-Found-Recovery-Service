@@ -24,9 +24,9 @@ server {
 		include         uwsgi_params;
 
 		# Sets the socket to a unix socket (currently broken, using web socket instead)
-#        uwsgi_pass      unix:/tmp/finder.sock;
+        uwsgi_pass      unix:///finder/web/finder/finder.sock;
 
 		# Sets the socket to a websocket (slower, but at least it works)
-		uwsgi_pass	127.0.0.1:3031;
+#		uwsgi_pass	127.0.0.1:3031;
     }
 } # End of the HTTP block
