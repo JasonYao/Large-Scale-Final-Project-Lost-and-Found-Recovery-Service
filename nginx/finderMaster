@@ -6,7 +6,7 @@ server {
 	listen 80 default_server;
 	listen [::]:80 ipv6only=on;
 
-	root /usr/share/nginx/html/;
+	root /;
 	index index.html;
 
 	server_name localhost;
@@ -22,7 +22,6 @@ server {
 	# Actually serves through the uwsgi protocol via a unix socket
 	location / {
 		include         uwsgi_params;
-
 		# Sets the socket to a unix socket (default, faster)
         uwsgi_pass      unix:///finder/web/finder/finder.sock;
 
