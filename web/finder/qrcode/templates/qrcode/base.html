@@ -11,7 +11,7 @@
     		{% block nav %}
     		<!-- Allow the header to be replacable -->
     		{% if request.user.is_authenticated %}
-    		{{ requser.user.username }}, <a href="{% url 'qrcode:logout' %}">Log Out</a>
+    		{{ requser.user.username }}, <a href="{% url 'qrcode:profile' %}">Profile</a> | <a href="{% url 'qrcode:item_add' %}">Add New Item</a> | <a href="{% url 'qrcode:logout' %}">Log Out</a>
     		{% else %}
     		<a href="{% url 'qrcode:login' %}">Login</a> | <a href="{% url 'qrcode:register' %}">Register</a>
     		{% endif %}

@@ -2,6 +2,10 @@
 {% load humanize %}
 {% load staticfiles %}
 
+{% block nav %}
+{{ requser.user.username }}, <a href="{% url 'qrcode:item_add' %}">Add New Item</a> | <a href="{% url 'qrcode:logout' %}">Log Out</a>
+{% endblock %}
+
 {% block content %}
 <div>
   <p>Welcome to your profile {{ user.username }}</p>
