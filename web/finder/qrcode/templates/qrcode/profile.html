@@ -1,0 +1,9 @@
+{% extends "qrcode/base.html" %}
+{% load humanize %}
+{% load staticfiles %}
+
+{% block content %}
+<div>
+  <p>Welcome to your profile {{ user.username }}</p>
+</div>
+{% endblock %}

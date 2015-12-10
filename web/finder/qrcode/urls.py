@@ -1,7 +1,7 @@
 """finder URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.9/topics/http/urls/
+    https://docs.djangoproject.com/en/1.8/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -11,13 +11,16 @@ Class-based views
     2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
 Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
-    2. Import the include() function: from django.conf.urls import url, include
-    3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
+    2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
-from django.contrib import admin
+from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-	url('^', include('qrcode.urls', namespace="qrcode")),
-    url(r'^admin/', admin.site.urls),
+    url(r'^$', views.index, name='home'),
+    url(r'^register/$', views.register, name='register'),
+    url(r'^profile/$', views.profile, name='profile'),
+    url(r'^items/(?P<item_id>[0-9]+)/$', views.item, name='item'),
+    url('^', include('django.contrib.auth.urls')),
 ]

@@ -1,0 +1,11 @@
+{% extends "qrcode/base.html" %}
+
+{% block nav %}
+<a href="{% url 'qrcode:login' %}">Log Back In</a> | <a href="{% url 'qrcode:home' %}">Home</a>
+{% endblock %}
+
+{% block content %}
+
+<p>Thanks for using qFindr</p>
+
+{% endblock %}
