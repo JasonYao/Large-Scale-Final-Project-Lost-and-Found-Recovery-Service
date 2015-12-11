@@ -1,7 +1,7 @@
-{% extends "qrcode/base.html" %}
+{% extends "reviews/base.html" %}
 
 {% block nav %}
-<a href="{% url 'qrcode:home' %}">Home</a> | <a href="{% url 'qrcode:register' %}">Register</a>
+<a href="{% url 'reviews:home' %}">Home</a> | <a href="{% url 'reviews:register' %}">Register</a>
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@
     {% endif %}
 {% endif %}
 
-<form method="post" action={% url 'qrcode:login' %}>
+<form method="post" action={% url 'reviews:login' %}>
 {% csrf_token %}
 <table>
 <tr>
@@ -37,6 +37,6 @@
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}
-{# <p><a href="{% url 'qrcode:password_reset' %}">Lost password?</a></p> #}
+{# <p><a href="{% url 'reviews:password_reset' %}">Lost password?</a></p> #}
 
 {% endblock %}
