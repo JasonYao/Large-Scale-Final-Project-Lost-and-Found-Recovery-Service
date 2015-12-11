@@ -1,10 +1,17 @@
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from qrcode.models import Item, FinderUser
 from qrcode.forms import CustomUserCreationForm, ItemForm
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
+
+# helper functions
+def createFinderUser(user):
+	u = FinderUser(
+		user_id=user.id, username=user.username, 
+		email=user.email)
+	u.save()
 
 # Create your views here.
 
@@ -23,10 +30,7 @@ def register(request):
 		if form.is_valid():
 			new_user = form.save(commit=True)
 			# Create a mirror sharded User model.
-			u = FinderUser(
-				user_id=new_user.id, username=new_user.username, 
-				email=new_user.email)
-			u.save()
+			createFinderUser(new_user)
 			# Log in that user.
 			user = authenticate(username=new_user.username,
 				password=form.clean_password2())
@@ -51,6 +55,13 @@ def profile(request):
 	'''List of recent posts by people I follow'''
 
 	user = request.user
+
+	# TODO: a FinderUser is not created when a super user is created, so we always make one for the user here
+	try:
+		finderUser = FinderUser.objects.get(user_id=user.id)
+	except FinderUser.DoesNotExist:
+		createFinderUser(user)
+
 	items = Item.objects.filter(user_id=user.id)
 
 	context = {
@@ -63,7 +74,7 @@ def item(request, user_id, item_id):
 	'''List of recent posts by people I follow'''
 
 	user = FinderUser.objects.get(user_id=user_id)
-	item = Item.objects.get(item_id=item_id)
+	item = Item.objects.get(id=item_id)
 
 	context = {
 		'user': user,
@@ -95,3 +106,31 @@ def add_item(request):
 		'form': form,
 	}
 	return render(request, 'qrcode/item_add.html', context)
+
+@login_required
+def edit_item(request, item_id):
+	'''List of recent posts by people I follow'''
+
+	user = request.user
+	item = get_object_or_404(Item, id=item_id)
+
+	if item.user_id != user.id:
+		return HttpResponseForbidden()
+
+	if request.method == 'POST':
+		form = ItemForm(request.POST, instance=item)
+
+		if form.is_valid():
+			new_item = form.save(commit=False)
+    		new_item.save()
+
+    		return HttpResponseRedirect(reverse('qrcode:profile', args=()))
+	else:
+		form = ItemForm(instance=item)
+
+	context = {
+		'user': user,
+		'form': form,
+		'item_id': item_id,
+	}
+	return render(request, 'qrcode/item_edit.html', context)
