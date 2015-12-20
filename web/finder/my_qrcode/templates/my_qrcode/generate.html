@@ -1,7 +1,6 @@
 {% extends "my_qrcode/base.html" %}
 {% load humanize %}
 {% load staticfiles %}
-{% load qr_tags %}
 
 {% block nav %}
 <a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
@@ -11,7 +10,7 @@
 <div>
   <h1>Print the QR Image</h1>
   <p>
-  	{% qr_from_text qr_url l %}
+  	<img src="{{ qr_image_source_url }}" />
   </p>
 </div>
 {% endblock %}
