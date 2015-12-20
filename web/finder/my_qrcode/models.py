@@ -13,10 +13,14 @@ class Item(models.Model):
     item_id = models.BigIntegerField(primary_key=True)
     owner = models.ForeignKey(FinderUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
+    # item statuses
+    ITEM_NOT_LOST = 'NL'
+    ITEM_LOST = 'L'
+    ITEM_FOUND = 'F'
     ITEM_STATUS = (
-        ('NL', 'Not Lost'),
-        ('L', 'Lost'),
-        ('F', 'Found'),
+        (ITEM_NOT_LOST, 'Not Lost'),
+        (ITEM_LOST, 'Lost'),
+        (ITEM_FOUND, 'Found'),
     )
     status = models.CharField(max_length=2, choices=ITEM_STATUS)
     is_public = models.BooleanField(default=True)
