@@ -31,7 +31,7 @@ class CustomUserCreationForm(UserCreationForm):
 class ItemForm(ModelForm):
   class Meta:
     model = Item
-    fields = ('name',)
+    fields = ('name', 'is_public',)
     widgets = {
       'name': TextInput(attrs={'id' : 'input_item'}),
     }

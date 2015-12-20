@@ -13,6 +13,12 @@ def createFinderUser(user):
 		email=user.email)
 	u.save()
 
+def generate_item_id():
+	last_item = Item.objects.all().order_by('-pk')
+	if len(last_item) > 0:
+		return last_item[0].item_id + 1
+	return 1
+
 # Create your views here.
 
 def index(request):
@@ -62,7 +68,7 @@ def profile(request):
 	except FinderUser.DoesNotExist:
 		createFinderUser(user)
 
-	items = Item.objects.filter(user_id=user.id)
+	items = Item.objects.filter(owner=finderUser)
 
 	context = {
 		'user': user,
@@ -74,7 +80,7 @@ def item(request, user_id, item_id):
 	'''List of recent posts by people I follow'''
 
 	user = FinderUser.objects.get(user_id=user_id)
-	item = Item.objects.get(id=item_id)
+	item = Item.objects.get(item_id=item_id)
 
 	context = {
 		'user': user,
@@ -93,7 +99,16 @@ def add_item(request):
 
 		if form.is_valid():
 			new_item = form.save(commit=False)
-    		new_item.user_id = request.user.id
+    		new_item.owner = user
+    		new_item.status = Item.ITEM_NOT_LOST
+
+    		# set item id
+    		item_id = generate_item_id()
+
+    		while len(Item.objects.filter(item_id=item_id)):
+    			item_id = generate_item_id()
+
+    		new_item.item_id = item_id
     		
     		new_item.save()
 
@@ -112,9 +127,9 @@ def edit_item(request, item_id):
 	'''List of recent posts by people I follow'''
 
 	user = FinderUser.objects.get(user_id=request.user.id)
-	item = get_object_or_404(Item, id=item_id)
+	item = get_object_or_404(Item, item_id=item_id)
 
-	if item.user_id != user.user_id:
+	if item.owner != user:
 		return HttpResponseForbidden()
 
 	if request.method == 'POST':
@@ -140,9 +155,9 @@ def delete_item(request, item_id):
 	'''List of recent posts by people I follow'''
 
 	user = FinderUser.objects.get(user_id=request.user.id)
-	item = get_object_or_404(Item, id=item_id)
+	item = get_object_or_404(Item, item_id=item_id)
 
-	if item.user_id != user.user_id:
+	if item.owner != user:
 		return HttpResponseForbidden()
 
 	if request.method == 'POST':
@@ -159,9 +174,9 @@ def delete_item(request, item_id):
 def generate(request, item_id):
 
 	user = FinderUser.objects.get(user_id=request.user.id)
-	item = get_object_or_404(Item, id=item_id)
+	item = get_object_or_404(Item, item_id=item_id)
 
-	if item.user_id != user.user_id:
+	if item.owner != user:
 		return HttpResponseForbidden()
 
 	# this is where we'll create the qrcode
@@ -178,9 +193,9 @@ def generate(request, item_id):
 def found(request, user_id, item_id):
 
 	user = FinderUser.objects.get(user_id=user_id)
-	item = get_object_or_404(Item, id=item_id)
+	item = get_object_or_404(Item, item_id=item_id)
 
-	if item.user_id != user.user_id:
+	if item.owner != user:
 		return HttpResponseForbidden()
 
 	# mark the item as found here
