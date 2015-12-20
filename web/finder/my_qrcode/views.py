@@ -62,7 +62,7 @@ def profile(request):
 	except FinderUser.DoesNotExist:
 		createFinderUser(user)
 
-	items = Item.objects.filter(user_id=user.id)
+	items = Item.objects.filter(owner=finderUser)
 
 	context = {
 		'user': user,
