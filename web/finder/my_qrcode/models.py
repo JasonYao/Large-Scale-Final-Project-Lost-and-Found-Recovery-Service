@@ -12,7 +12,6 @@ class FinderUser(models.Model):
 class Item(models.Model):
     item_id = models.BigIntegerField(primary_key=True)
     owner = models.ForeignKey(FinderUser, on_delete=models.CASCADE)
-    qr_code = models.CharField(max_length=256)
     name = models.CharField(max_length=50)
     ITEM_STATUS = (
         ('NL', 'Not Lost'),
