@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm, TextInput
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from qrcode.models import Item
+from my_qrcode.models import Item
 
 class CustomUserCreationForm(UserCreationForm):
 	email = forms.EmailField(required=True) # include the email field

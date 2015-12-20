@@ -18,6 +18,6 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-	url('^', include('qrcode.urls', namespace="qrcode")),
+	url('^', include('my_qrcode.urls', namespace="my_qrcode")),
     url(r'^admin/', admin.site.urls),
 ]

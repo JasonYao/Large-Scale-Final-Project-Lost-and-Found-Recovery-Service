@@ -1,14 +1,14 @@
-{% extends "qrcode/base.html" %}
+{% extends "my_qrcode/base.html" %}
 {% load humanize %}
 {% load staticfiles %}
 
 {% block nav %}
-<a href="{% url 'qrcode:profile' %}">Profile</a> | <a href="{% url 'qrcode:logout' %}">Log Out</a>
+<a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
 {% endblock %}
 
 {% block content %}
 <div>
-	<form action="{% url 'qrcode:item_edit' item_id %}" method="post">
+	<form action="/add/" method="post">
 	{% csrf_token %}
   	{{ form.as_p }}
   	<input type="submit" value="Submit" />

@@ -1,8 +1,8 @@
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
-from qrcode.models import Item, FinderUser
-from qrcode.forms import CustomUserCreationForm, ItemForm
+from my_qrcode.models import Item, FinderUser
+from my_qrcode.forms import CustomUserCreationForm, ItemForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 
@@ -19,11 +19,11 @@ def index(request):
 	context = {
 		'user': request.user
 	}
-	return render(request, 'qrcode/home.html', context)
+	return render(request, 'my_qrcode/home.html', context)
 
 def register(request):
 	if request.user.is_authenticated():
-		return HttpResponseRedirect(reverse('qrcode:profile', args=()))
+		return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
 	if request.method == 'POST':
 		form = CustomUserCreationForm(request.POST)
 
@@ -38,7 +38,7 @@ def register(request):
 				login(request, user)
 			else:
 				raise Exception
-			return HttpResponseRedirect(reverse('qrcode:profile', args=()))
+			return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
 	else:
 		form = CustomUserCreationForm
 
@@ -46,7 +46,7 @@ def register(request):
 		'form': form,
 	}
 
-	return render(request, 'qrcode/register.html', context)
+	return render(request, 'my_qrcode/register.html', context)
 
 # Authenticated views
 #####################
@@ -68,7 +68,7 @@ def profile(request):
 		'user': user,
 		'items': items,
 	}
-	return render(request, 'qrcode/profile.html', context)
+	return render(request, 'my_qrcode/profile.html', context)
 
 def item(request, user_id, item_id):
 	'''List of recent posts by people I follow'''
@@ -80,7 +80,7 @@ def item(request, user_id, item_id):
 		'user': user,
 		'item': item,
 	}
-	return render(request, 'qrcode/item.html', context)
+	return render(request, 'my_qrcode/item.html', context)
 
 @login_required
 def add_item(request):
@@ -97,7 +97,7 @@ def add_item(request):
     		
     		new_item.save()
 
-    		return HttpResponseRedirect(reverse('qrcode:profile', args=()))
+    		return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
 	else:
 		form = ItemForm
 
@@ -105,7 +105,7 @@ def add_item(request):
 		'user': user,
 		'form': form,
 	}
-	return render(request, 'qrcode/item_add.html', context)
+	return render(request, 'my_qrcode/item_add.html', context)
 
 @login_required
 def edit_item(request, item_id):
@@ -124,7 +124,7 @@ def edit_item(request, item_id):
 			new_item = form.save(commit=False)
     		new_item.save()
 
-    		return HttpResponseRedirect(reverse('qrcode:profile', args=()))
+    		return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
 	else:
 		form = ItemForm(instance=item)
 
@@ -133,7 +133,7 @@ def edit_item(request, item_id):
 		'form': form,
 		'item_id': item_id,
 	}
-	return render(request, 'qrcode/item_edit.html', context)
+	return render(request, 'my_qrcode/item_edit.html', context)
 
 @login_required
 def generate(request, item_id):
@@ -152,4 +152,4 @@ def generate(request, item_id):
 		'item_id': item_id,
 		'qr_url': qr_url,
 	}
-	return render(request, 'qrcode/generate.html', context)
+	return render(request, 'my_qrcode/generate.html', context)
