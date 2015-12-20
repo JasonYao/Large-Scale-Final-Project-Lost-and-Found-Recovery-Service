@@ -145,7 +145,7 @@ def generate(request, item_id):
 		return HttpResponseForbidden()
 
 	# this is where we'll create the qrcode
-	qr_url = '/items/' + str(item_id) + '/' # make this the full site url, for now leave it as this dummy url
+	qr_url = '/found/' + user.id + '/' + str(item_id) + '/' # make this the full site url, for now leave it as this dummy url
 
 	context = {
 		'user': user,
@@ -153,3 +153,19 @@ def generate(request, item_id):
 		'qr_url': qr_url,
 	}
 	return render(request, 'my_qrcode/generate.html', context)
+
+def found(request, user_id, item_id):
+
+	user = FinderUser.objects.get(user_id=user_id)
+	item = get_object_or_404(Item, id=item_id)
+
+	if item.user_id != user.user_id:
+		return HttpResponseForbidden()
+
+	# mark the item as found here
+
+	context = {
+		'user': user,
+		'item': item,
+	}
+	return render(request, 'my_qrcode/found.html', context)

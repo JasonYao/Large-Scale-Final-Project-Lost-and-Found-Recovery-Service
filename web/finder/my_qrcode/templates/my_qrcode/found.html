@@ -1,0 +1,16 @@
+{% extends "my_qrcode/base.html" %}
+{% load humanize %}
+{% load staticfiles %}
+
+{% block nav %}
+<a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+<div>
+  <h1>Thank You for returning <i>{{ item.name }}</i></h1>
+  <p>
+  	Please contact the {{ user.username }} at "{{ user.email }}" for more instructions on how to return the item
+  </p>
+</div>
+{% endblock %}
