@@ -2,65 +2,36 @@
 {% load staticfiles %}
 <html>
     <head>
-        <!-- Bootstrap -->
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
-        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<!-- Bootstrap -->
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
+		integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
-        integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
+		integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
-        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
         
-        <!-- Custom qr code styling -->
-        <link rel="stylesheet" type="text/css" href="{% static 'my_qrcode/css/style.css' %}" />
+		<!-- Custom qr code styling -->
+		<link rel="stylesheet" type="text/css" href="{% static 'my_qrcode/css/style.css' %}" />
 
         <title>qFinder</title>
     </head>
 
     <body>
-        <div>
-            {% block nav %}
-            <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="nav nav-pills">
-                        <li class="active">
-                            <a href="#">Home</a>
-                        </li>
-                        {% if request.user.is_authenticated %}
-                        <li>
-                            <a href="{% url 'my_qrcode:profile' %}">Profile</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'my_qrcode:item_add' %}">Add New Item</a>
-                        </li>
-                        {% else %}
-                        <a href="{% url 'my_qrcode:login' %}">Login</a> | <a href="{% url 'my_qrcode:register' %}">Register</a>
-                        {% endif %}
-                    </ul>
-                    <div class="jumbotron">
-                        <h2>
-                            Qrfinder
-                        </h2>
-                        <p>
-                            Qrfinder lets you create and print qr codes to add to items you own. Anyone who finds them and scans the code will be able to contact you immediately. 
-                        </p>
-                        <p>
-                            {% if request.user.is_authenticated %}
-                            <a class="btn btn-primary btn-large" href="{% url 'my_qrcode:register' %}">Register</a>
-                            {% endif %}
-                        </p>
-                    </div>
-                </div>
-            </div>
-            </div>
-            {% endblock %}
-        </div>
+    	<div>
+    		{% block nav %}
+    		<!-- Allow the header to be replacable -->
+    		{% if request.user.is_authenticated %}
+    		{{ request.user.username }}, <a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:item_add' %}">Add New Item</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
+    		{% else %}
+    		<a href="{% url 'my_qrcode:login' %}">Login</a> | <a href="{% url 'my_qrcode:register' %}">Register</a>
+    		{% endif %}
+    		{% endblock %}
+    	</div>
+        {% block content %}{% endblock %}
     </body>
 </html>
-
-
