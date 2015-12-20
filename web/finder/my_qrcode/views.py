@@ -22,8 +22,11 @@ def generate_item_id():
 # Create your views here.
 
 def index(request):
+	user = None
+	if request.user:
+		user = request.user
 	context = {
-		'user': request.user
+		'user': user
 	}
 	return render(request, 'my_qrcode/home.html', context)
 
