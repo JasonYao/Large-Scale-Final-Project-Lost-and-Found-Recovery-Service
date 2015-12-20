@@ -12,7 +12,7 @@
 
   <ul>
   	{% for item in items %}
-  	<li>{{ item.name }} - <a href="{% url 'qrcode:item_edit' item.id %}">Edit</a></li>
+  	<li>{{ item.name }} - <a href="{% url 'qrcode:item_edit' item.id %}">Edit</a> | <a href="{% url 'qrcode:generate' item.id %}">Generate Qr </a></li>
   	{% endfor %}
   </ul>
 </div>

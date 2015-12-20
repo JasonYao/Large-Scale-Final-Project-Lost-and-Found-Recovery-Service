@@ -1,0 +1,16 @@
+{% extends "qrcode/base.html" %}
+{% load humanize %}
+{% load staticfiles %}
+
+{% block nav %}
+<a href="{% url 'qrcode:profile' %}">Profile</a> | <a href="{% url 'qrcode:logout' %}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+<div>
+  <h1>Print the QR Image</h1>
+  <p>
+  	QR IMAGE GOES HERE USING THE URL PASSED IN: {{ qr_url }}
+  </p>
+</div>
+{% endblock %}
