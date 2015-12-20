@@ -1,37 +1,50 @@
-<!DOCTYPE html>
 {% load staticfiles %}
-<html>
+<!doctype html>
     <head>
-		<!-- Bootstrap -->
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
-		integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Tagit QR Service</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<!-- Optional theme -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
-		integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'my_qrcode/css/normalize.css' %}">
+        <link rel="stylesheet" href="{% static 'my_qrcode/css/main.css' %}">
 
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
-		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-        
-		<!-- Custom qr code styling -->
-		<link rel="stylesheet" type="text/css" href="{% static 'my_qrcode/css/style.css' %}" />
-
-        <title>qFinder</title>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic' rel='stylesheet'>
     </head>
+    <body id="register">
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <header>
+            <nav>
+                <h1><a href="">Tag It!</a></h1>
+                <ul class="clearfix">
+                    <li><a href="">Register</a></li>
+                </ul>
+            </nav>
+        </header>
 
     <body>
-    	<div>
-    		{% block nav %}
-    		<!-- Allow the header to be replacable -->
-    		{% if request.user.is_authenticated %}
-    		{{ request.user.username }}, <a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:item_add' %}">Add New Item</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
-    		{% else %}
-    		<a href="{% url 'my_qrcode:login' %}">Login</a> | <a href="{% url 'my_qrcode:register' %}">Register</a>
-    		{% endif %}
-    		{% endblock %}
-    	</div>
+        <div>
+            <h1>avash {{ BASE_DIR }}</h1>
+            {% block nav %}
+            <!-- Allow the header to be replacable -->
+            {% if request.user.is_authenticated %}
+            {{ request.user.username }}, <a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:item_add' %}">Add New Item</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
+            {% else %}
+            <a href="{% url 'my_qrcode:login' %}">Login</a> | <a href="{% url 'my_qrcode:register' %}">Register</a>
+            {% endif %}
+            {% endblock %}
+        </div>
         {% block content %}{% endblock %}
+        
+        <footer></footer>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-2.1.4.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
     </body>
 </html>

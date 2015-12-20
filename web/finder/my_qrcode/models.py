@@ -24,6 +24,3 @@ class Item(models.Model):
     )
     status = models.CharField(max_length=2, choices=ITEM_STATUS)
     is_public = models.BooleanField(default=True)
-
-
-
