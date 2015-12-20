@@ -1,0 +1,64 @@
+<!-- {% extends "micro/base2.html" %}
+
+{% block header %}
+    <a href="{% url 'micro:register' %}">Register</a>
+{% endblock header %} -->
+
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic' rel='stylesheet'>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <header>
+            <nav>
+                <h1><a href="">Tag It!</a></h1>
+                <ul class="clearfix">
+                    <li><a href="">Register</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div id="wrapper">
+                <button id="add_item">Add Item</button>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Item Name</th>
+                        <th></th>
+                    </tr>
+                    <? for ($i=0; $i<10; $i++) : ?>
+                    <tr>
+                        <td class="menued"><button name="del_item_id" data="#insert item here"></button></td>
+                        <td class="menued"><button name="edit_item_id" data="#insert item here"></button></td>
+                        <td></td>
+                        <td class="menued"><button name="report_item_id" data="#insert item here">Report Lost</button></td>
+                    </tr>
+                    <? endfor; ?>
+                </table>
+        </div>
+        <footer>
+            
+        </footer>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
