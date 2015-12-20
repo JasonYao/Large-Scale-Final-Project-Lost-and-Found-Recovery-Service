@@ -1,0 +1,19 @@
+{% extends "my_qrcode/base.html" %}
+{% load humanize %}
+{% load staticfiles %}
+
+{% block nav %}
+{{ request.user.username }}, <a href="{% url 'my_qrcode:item_add' %}">Add New Item</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+<div>
+  <p>Welcome to your profile {{ user.username }}</p>
+
+  <ul>
+  	{% for item in items %}
+  	<li>{{ item.name }} - <a href="{% url 'my_qrcode:item_edit' item.id %}">Edit</a> | <a href="{% url 'my_qrcode:generate' item.id %}">Generate Qr </a></li>
+  	{% endfor %}
+  </ul>
+</div>
+{% endblock %}
