@@ -5,7 +5,7 @@ from my_qrcode.models import Item, FinderUser
 from my_qrcode.forms import CustomUserCreationForm, ItemForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-from qrcode import * # needs Python Image Library (PIL)
+import qrcode # needs Python Image Library (PIL)
 from django.conf import settings
 
 # helper functions
@@ -197,12 +197,15 @@ def generate(request, item_id):
 	qr_uri = request.build_absolute_uri(qr_url) # the full absolute uri to be sent to the qrcode app
 
 	# generate the qr_code
-
+	img = qrcode.make(qr_uri)
+	qr_filename = 'qr_' + str(item.item_id) + '.png'
+	img.save(settings.MEDIA_ROOT + qr_filename)
 
 	context = {
 		'user': user,
 		'item_id': item_id,
 		'qr_url': qr_uri,
+		'qr_image_source_url': settings.MEDIA_URL + qr_filename
 	}
 	return render(request, 'my_qrcode/generate.html', context)
 
