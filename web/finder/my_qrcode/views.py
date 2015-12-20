@@ -72,11 +72,12 @@ def profile(request):
 		finderUser = FinderUser.objects.get(user_id=user.id)
 	except FinderUser.DoesNotExist:
 		createFinderUser(user)
+		finderUser = FinderUser.objects.get(user_id=user.id)
 
 	items = Item.objects.filter(owner=finderUser)
 
 	context = {
-		'user': user,
+		'user': finderUser,
 		'items': items,
 	}
 	return render(request, 'my_qrcode/profile.html', context)
@@ -188,7 +189,7 @@ def generate(request, item_id):
 	qr_uri = request.build_absolute_uri(qr_url) # the full absolute uri to be sent to the qrcode app
 
 	# generate the qr_code
-	
+
 
 	context = {
 		'user': user,
