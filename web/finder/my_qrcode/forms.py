@@ -29,10 +29,30 @@ class CustomUserCreationForm(UserCreationForm):
 		return user
 
 class ItemForm(ModelForm):
+  mark_lost = forms.BooleanField(label='Mark Item Lost?', required=False)
+  
   class Meta:
     model = Item
-    fields = ('name', 'is_public',)
+    fields = ('name', 'is_public', 'mark_lost',)
     widgets = {
       'name': TextInput(attrs={'id' : 'input_item'}),
     }
+
+  def clean_mark_lost(self):
+  	lost = self.cleaned_data['mark_lost']
+  	return lost
+
+  def save(self, commit=True):
+  	item = super(ItemForm, self).save(commit=False)
+  	lost = self.cleaned_data['mark_lost']
+
+  	if lost:
+  		item.status = Item.ITEM_LOST
+  	elif item.status != Item.ITEM_FOUND:
+  		item.status = Item.ITEM_NOT_LOST
+
+  	if commit:
+  		item.save()
+
+  	return item
 
