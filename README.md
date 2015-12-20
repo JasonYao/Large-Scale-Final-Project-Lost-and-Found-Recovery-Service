@@ -31,11 +31,11 @@ The application implements an anonymous lost & found service, where:
 
 Tech Stack Design (metal up):
  
-	[Operating System]		TBD
+	[Operating System]		Ubuntu 14.04 x86_64
 
-	[Load Balancer]			TBD
+	[Load Balancer]			Amazon ELB
 
-	[Application Server]	TBD
+	[Application Server]	uWSGI + nginx
 
 	[Application Framework]	Django
 

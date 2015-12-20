@@ -3,12 +3,12 @@
 
 set -e
 
-$APP_NAME=qFindr
+$APP_NAME=finder
 
 # Sets up the python environment required
 	BASEDIR=`dirname $0`/..
-	$DATABASE_ROOT_PASSWORD=ChangeMeToALongRandomlyGeneratedPasswordBeforeRun
-	$DATABASE_USER_PASSWORD=ChangeMeToALongRandomlyGeneratedPasswordBeforeRun
+	$DATABASE_ROOT_PASSWORD=u50wAl7bfIKGgwseMPeGxgOGJ7PxSkiDa&vZdzQ&NzyU5hmMAiQnDyTI*yE7LtcfBZM#5Wz2@x^ouK1!Mdeqd^hFrlr^#SJuBFu
+	$DATABASE_USER_PASSWORD=wQeYU!3qZdfOJ6iu&UWI4rNyjB4AA3y&35OgY7Mr!blyL*ZSXo2KSTH^Wbj1f4347kn@MkBQxB6Hg3kjd^jC2@KnAF6#Xlib
 
 if [ ! -d "$BASEDIR/.env" ]; then
 	apt-get install virtualenv -y
