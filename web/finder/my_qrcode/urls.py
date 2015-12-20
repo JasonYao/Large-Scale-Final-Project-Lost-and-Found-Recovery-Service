@@ -20,7 +20,10 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     url(r'^$', views.index, name='home'),
     url(r'^register/$', views.register, name='register'),
+
     url(r'^profile/$', views.profile, name='profile'),
+	url(r'^profile/(?P<parameter_user_id>[0-9]+)', views.public_profile, name='public_profile'),
+
     url(r'^items/(?P<user_id>[0-9]+)/(?P<item_id>[0-9]+)/$', views.item, name='item'),
     url(r'^add/$', views.add_item, name='item_add'),
     url(r'^items/(?P<item_id>[0-9]+)/edit/$', views.edit_item, name='item_edit'),
