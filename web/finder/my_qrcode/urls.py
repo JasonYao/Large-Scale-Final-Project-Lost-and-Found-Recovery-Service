@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^items/(?P<user_id>[0-9]+)/(?P<item_id>[0-9]+)/$', views.item, name='item'),
     url(r'^add/$', views.add_item, name='item_add'),
     url(r'^items/(?P<item_id>[0-9]+)/edit/$', views.edit_item, name='item_edit'),
+    url(r'^items/(?P<item_id>[0-9]+)/delete/$', views.delete_item, name='item_delete'),
     url(r'^generate/(?P<item_id>[0-9]+)/$', views.generate, name='generate'),
     url(r'^found/(?P<user_id>[0-9]+)/(?P<item_id>[0-9]+)/$', views.found, name='found'),
     url('^', include('django.contrib.auth.urls')),
