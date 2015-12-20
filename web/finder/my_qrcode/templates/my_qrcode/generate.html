@@ -1,6 +1,7 @@
 {% extends "my_qrcode/base.html" %}
 {% load humanize %}
 {% load staticfiles %}
+{% load qr_tags %}
 
 {% block nav %}
 <a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
