@@ -93,7 +93,7 @@ def public_profile(request, parameter_user_id):
                 }
                 return render(request, 'my_qrcode/public_profile.html', context)
     except FinderUser.DoesNotExist or UnboundLocalError:
-        return render(request, 'my_qrcode/index.html', context)
+    	return flashHomeMessage(request, 'Sorry, we could\'t find a user by that specification')
 
 
 def register(request):

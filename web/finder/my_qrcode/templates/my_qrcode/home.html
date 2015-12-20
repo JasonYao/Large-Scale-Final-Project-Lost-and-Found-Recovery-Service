@@ -1,14 +1,14 @@
 {% extends "my_qrcode/base.html" %}
 
-{% if message %}
-<div class="flash-message"><p>{{ message }}</p></div>
-{% endif %}
-
 {% block nav %}
 <a href="{% url 'my_qrcode:home' %}">Home</a> | {% if request.user.is_authenticated %}<a href="{% url 'my_qrcode:profile' %}">Profile</a>{% else %}<a href="{% url 'my_qrcode:register' %}">Register</a>{% endif %}
 {% endblock %}
 
 {% block content %}
+
+{% if message %}
+<div class="flash-message"><p>{{ message }}</p></div>
+{% endif %}
 
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
