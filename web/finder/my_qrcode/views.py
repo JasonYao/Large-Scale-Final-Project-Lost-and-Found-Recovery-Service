@@ -145,12 +145,13 @@ def generate(request, item_id):
 		return HttpResponseForbidden()
 
 	# this is where we'll create the qrcode
-	qr_url = '/found/' + user.id + '/' + str(item_id) + '/' # make this the full site url, for now leave it as this dummy url
+	qr_url = '/found/' + str(user.id) + '/' + str(item_id) + '/' # make this the full site url, for now leave it as this dummy url
+	qr_uri = request.build_absolute_uri(qr_url) # the full absolute uri to be sent to the qrcode app
 
 	context = {
 		'user': user,
 		'item_id': item_id,
-		'qr_url': qr_url,
+		'qr_url': qr_uri,
 	}
 	return render(request, 'my_qrcode/generate.html', context)
 
