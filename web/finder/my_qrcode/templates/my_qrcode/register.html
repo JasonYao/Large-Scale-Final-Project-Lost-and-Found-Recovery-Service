@@ -1,15 +1,30 @@
 {% extends "my_qrcode/base.html" %}
 
 {% block nav %}
-<a href="{% url 'my_qrcode:login' %}">Login</a>
+    <li><a href="{% url 'my_qrcode:login' %}">Login</a></li>
 {% endblock %}
 
 {% block content %}
-<form action="/register/" method="post">
-<table class="registerTable">
-  {% csrf_token %}
-  {{ form.as_table }}
-</table>
-  <input type="submit" value="Submit" />
-</form>
+    <form action="/register/" method="post" id="login_form" class="">
+        {% if form.errors %}
+            <p class="error">Your username and password didn't match. Please try again.</p>
+        {% endif %}
+        
+        {% if next %}
+            {% if user.is_authenticated %}
+                <p class="error">Your account doesn't have access to this page.</p>
+            {% else %}
+                <p class="error">Please login to see this page.</p>
+            {% endif %}
+        {% endif %}
+        
+        <!-- {{ form.as_table }} -->
+        <!-- this is a temporary cop out, I should use model form fields, but for now -->
+        <input type="email" placeholder="Email" name="email" />
+        <input type="text" placeholder="Username" name="username" />
+        <input type="password" placeholder="Password" name="password1" />
+        <input type="password" placeholder="Confirm Password" name="password2" />
+        <button type="submit" name="login_button">Register</button>
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
 {% endblock %}

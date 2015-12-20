@@ -6,41 +6,27 @@
         <title>Tagit QR Service</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        
+        <!-- <link rel="stylesheet" href="https://s3.amazonaws.com/avash/normalize.css"> -->
+        <!-- <link rel="stylesheet" href="https://s3.amazonaws.com/avash/main.css"> -->
         <link rel="stylesheet" href="{% static 'my_qrcode/css/normalize.css' %}">
         <link rel="stylesheet" href="{% static 'my_qrcode/css/main.css' %}">
 
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic' rel='stylesheet'>
     </head>
     <body id="register">
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-
-        <!-- Add your site or application content here -->
         <header>
             <nav>
                 <h1><a href="">Tag It!</a></h1>
                 <ul class="clearfix">
-                    <li><a href="">Register</a></li>
+                    {% block nav %}{% endblock %}
                 </ul>
             </nav>
-        </header>
-
-    <body>
-        <div>
-            <h1>avash {{ BASE_DIR }}</h1>
-            {% block nav %}
-            <!-- Allow the header to be replacable -->
-            {% if request.user.is_authenticated %}
-            {{ request.user.username }}, <a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:item_add' %}">Add New Item</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
-            {% else %}
-            <a href="{% url 'my_qrcode:login' %}">Login</a> | <a href="{% url 'my_qrcode:register' %}">Register</a>
-            {% endif %}
-            {% endblock %}
+        </header>    
+        <div id="wrapper">
+            <h2>Do you <span>lose</span> your things? Fret not, we <span>find</span> your things! You're welcome.</h2>
+            <div>{% block content %}{% endblock %}</div>
         </div>
-        {% block content %}{% endblock %}
-        
         <footer></footer>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-2.1.4.min.js"><\/script>')</script>

@@ -1,46 +1,36 @@
 {% extends "my_qrcode/base.html" %}
 
 {% if message %}
-<div class="flash-message"><p>{{ message }}</p></div>
+    <div class="flash-message"><p>{{ message }}</p></div>
 {% endif %}
 
 {% block nav %}
-<a href="{% url 'my_qrcode:home' %}">Home</a> | <a href="{% url 'my_qrcode:register' %}">Register</a>
+    <li><a href="{% url 'my_qrcode:register' %}">Register</a></li>
 {% endblock %}
 
 {% block content %}
-
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
-
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
+    {% if next %}
+        {% if user.is_authenticated %}
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+        {% else %}
+        <p>Please login to see this page.</p>
+        {% endif %}
     {% endif %}
-{% endif %}
 
-<form method="post" action={% url 'my_qrcode:login' %}>
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+    <form method="post" action={% url 'my_qrcode:login' %}>
+    {% csrf_token %}
+        <form action="{% url 'my_qrcode:login' %}" method="post" id="login_form" class="">
+            {% csrf_token %}
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-
-{# Assumes you setup the password_reset view in your URLconf #}
-{# <p><a href="{% url 'my_qrcode:password_reset' %}">Lost password?</a></p> #}
-
+            {% if form.errors %}
+                <p class="error">Your username and password didn't match. Please try again.</p>
+            {% endif %}
+            
+            <input type="text" placeholder="Username" name="username" />
+            <input type="password" placeholder="Password" name="password" />
+            <button type="submit" name="login">Sign In</button>
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>    
+    </form>
 {% endblock %}
