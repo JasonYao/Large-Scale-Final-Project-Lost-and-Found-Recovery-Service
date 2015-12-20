@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class QrcodeConfig(AppConfig):
-    name = 'qrcode'
+class QrcoderConfig(AppConfig):
+	verbose_name = "qrcoder"

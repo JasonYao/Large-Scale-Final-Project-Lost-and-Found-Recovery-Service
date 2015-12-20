@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'qrcode', # our app comes first so that templates are first found here
+    'qrcode.apps.QrcoderConfig', # our app comes first so that templates are first found here
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
