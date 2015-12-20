@@ -37,6 +37,21 @@ def index(request, message = None):
 	}
 	return render(request, 'my_qrcode/home.html', context)
 
+
+def public_profile(request, parameter_user_id):
+	try:
+		user = FinderUser.objects.get(user_id=parameter_user_id)
+		items = Item.objects.filter(owner=user)
+		context = {
+        	'user': user,
+        	'items': items,
+    	}
+
+		return render(request, 'my_qrcode/public_profile.html', context)
+	except FinderUser.DoesNotExist:
+		return render(request, 'my_qrcode/index.html', context)
+
+
 def register(request):
 	if request.user.is_authenticated():
 		return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
