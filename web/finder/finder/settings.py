@@ -31,12 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'qrcode', # our app comes first so that templates are first found here
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -74,16 +76,7 @@ WSGI_APPLICATION = 'finder.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'finder',
-		'USER': 'finder',
-		'PASSWORD': 'Paz*1C40!3h@SB4dxg2tR%R2n5EnriLgBZgMpAjdpOdoKum#8M4UgLFjQ%h39oRXUur6nQt6v4aEPyA$E%9aqArsYOfe4IM@H49M',
-		'HOST': '',
-		'PORT': '',
-    }
-}
+execfile(os.path.join(BASE_DIR, '..', '..', 'db', 'db_settings.py'))
 
 
 # Password validation
@@ -125,4 +118,7 @@ USE_TZ = True
 #STATIC_URL = 'static/'
 STATIC_URL = os.path.join(BASE_DIR, "static/")
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/profile/'
 
