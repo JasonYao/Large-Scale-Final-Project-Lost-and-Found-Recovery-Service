@@ -86,7 +86,7 @@ def item(request, user_id, item_id):
 def add_item(request):
 	'''List of recent posts by people I follow'''
 
-	user = request.user
+	user = FinderUser.objects.get(user_id=request.user.id)
 
 	if request.method == 'POST':
 		form = ItemForm(request.POST)
@@ -111,7 +111,7 @@ def add_item(request):
 def edit_item(request, item_id):
 	'''List of recent posts by people I follow'''
 
-	user = request.user
+	user = FinderUser.objects.get(user_id=request.user.id)
 	item = get_object_or_404(Item, id=item_id)
 
 	if item.user_id != user.id:
@@ -138,7 +138,7 @@ def edit_item(request, item_id):
 @login_required
 def generate(request, item_id):
 
-	user = request.user
+	user = FinderUser.objects.get(user_id=request.user.id)
 	item = get_object_or_404(Item, id=item_id)
 
 	if item.user_id != user.id:
