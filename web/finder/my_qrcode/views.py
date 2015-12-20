@@ -88,6 +88,14 @@ def item(request, user_id, item_id):
 	user = FinderUser.objects.get(user_id=user_id)
 	item = Item.objects.get(item_id=item_id)
 
+	if item.is_public == False:
+		if request.user.is_authenticated():
+			logged_in_user = FinderUser.objects.get(user_id=request.user.id)
+			if item.owner != logged_in_user:
+				return HttpResponseForbidden('This is not your item')
+		else:
+			return HttpResponseForbidden()
+
 	context = {
 		'user': user,
 		'item': item,
