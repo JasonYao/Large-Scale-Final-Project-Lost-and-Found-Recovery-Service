@@ -22,7 +22,12 @@
             <nav>
                 <h1><a href="">Tag It!</a></h1>
                 <ul class="clearfix">
-                    <li><a href="">Register</a></li>
+                    {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'my_qrcode:profile' %}">Profile</a></li>
+                    <li><a href="{% url 'my_qrcode:logout' %}">Log Out</a></li>
+                    {% else %}
+                    <li><a href="{% url 'my_qrcode:register' %}">Register</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </header>
