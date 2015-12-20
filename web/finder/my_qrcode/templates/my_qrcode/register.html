@@ -6,6 +6,8 @@
 
 {% block content %}
     <form action="/register/" method="post" id="login_form" class="">
+        {% csrf_token %}
+        
         {% if form.errors %}
             <p class="error">Your username and password didn't match. Please try again.</p>
         {% endif %}
