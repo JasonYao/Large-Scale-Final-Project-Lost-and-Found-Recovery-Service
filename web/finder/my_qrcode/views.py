@@ -39,18 +39,37 @@ def index(request, message = None):
 
 
 def public_profile(request, parameter_user_id):
-	try:
-		user = FinderUser.objects.get(user_id=parameter_user_id)
-		items = Item.objects.filter(owner=user)
-		context = {
-        	'user': user,
-        	'items': items,
-    	}
-
-		return render(request, 'my_qrcode/public_profile.html', context)
-	except FinderUser.DoesNotExist:
-		return render(request, 'my_qrcode/index.html', context)
-
+    try:
+        request_user = request.user
+        if request_user == None:
+            # Requesting user is not logged in, will always return public profile views
+            user = FinderUser.objects.get(user_id=parameter_user_id)
+            items = Item.objects.filter(owner=user)
+            context = {
+                'user': user,
+                'items': items,
+            }
+            return render(request, 'my_qrcode/public_profile.html', context)
+        else:
+            # Requesting user is checking their own profile, allowed to edit
+            if request_user.id == parameter_user_id:
+                # User was matched, shown admin-rights profile page
+                items = Item.objects.filter(owner=request_user)
+                context = {
+                    'user': request_user,
+                    'items': items,
+                }
+                return render(request, 'my_qrcode/profile.html', context)
+            else:
+                user = FinderUser.objects.get(user_id=parameter_user_id)
+                items = Item.objects.filter(owner=user)
+                context = {
+                    'user': user,
+                    'items': items,
+                }
+                return render(request, 'my_qrcode/public_profile.html', context)
+    except FinderUser.DoesNotExist:
+        return render(request, 'my_qrcode/index.html', context)
 
 def register(request):
 	if request.user.is_authenticated():
