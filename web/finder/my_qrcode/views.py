@@ -21,14 +21,19 @@ def generate_item_id():
 		return last_item[0].item_id + 1
 	return 1
 
+def flashHomeMessage(request, message):
+	return index(request, message)
+
 # Create your views here.
 
-def index(request):
+def index(request, message = None):
 	user = None
 	if request.user:
 		user = request.user
+
 	context = {
-		'user': user
+		'user': user,
+		'message': message,
 	}
 	return render(request, 'my_qrcode/home.html', context)
 
@@ -85,16 +90,21 @@ def profile(request):
 def item(request, user_id, item_id):
 	'''List of recent posts by people I follow'''
 
-	user = FinderUser.objects.get(user_id=user_id)
-	item = Item.objects.get(item_id=item_id)
+	try:
+		user = FinderUser.objects.get(user_id=user_id)
+		item = Item.objects.get(item_id=item_id)
+	except FinderUser.DoesNotExist:
+		return flashHomeMessage(request, 'Sorry, we could\'t find a user by that specification')
+	except Item.DoesNotExist:
+		return flashHomeMessage(request, 'Sorry, we could\'t find an item by that specification')
 
 	if item.is_public == False:
 		if request.user.is_authenticated():
 			logged_in_user = FinderUser.objects.get(user_id=request.user.id)
 			if item.owner != logged_in_user:
-				return HttpResponseForbidden('This is not your item')
+				return flashHomeMessage(request, 'This is not your item so you unfortunately can\'t view it')
 		else:
-			return HttpResponseForbidden()
+			return flashHomeMessage(request, 'Please log in to view this item')
 
 	context = {
 		'user': user,
@@ -144,7 +154,7 @@ def edit_item(request, item_id):
 	item = get_object_or_404(Item, item_id=item_id)
 
 	if item.owner != user:
-		return HttpResponseForbidden()
+		return flashHomeMessage(request, 'This isn\'t your item')
 
 	if request.method == 'POST':
 		form = ItemForm(request.POST, instance=item)
@@ -171,7 +181,7 @@ def delete_item(request, item_id):
 	item = get_object_or_404(Item, item_id=item_id)
 
 	if item.owner != user:
-		return HttpResponseForbidden()
+		return flashHomeMessage(request, 'This isn\'t your item')
 
 	if request.method == 'POST':
 		item.delete()    	
@@ -190,7 +200,7 @@ def generate(request, item_id):
 	item = get_object_or_404(Item, item_id=item_id)
 
 	if item.owner != user:
-		return HttpResponseForbidden()
+		return flashHomeMessage(request, 'This isn\'t your item')
 
 	# this is where we'll create the qrcode
 	qr_url = '/found/' + str(user.user_id) + '/' + str(item_id) + '/' # make this the full site url, for now leave it as this dummy url
@@ -211,11 +221,13 @@ def generate(request, item_id):
 
 def found(request, user_id, item_id):
 
-	user = FinderUser.objects.get(user_id=user_id)
-	item = get_object_or_404(Item, item_id=item_id)
-
-	if item.owner != user:
-		return HttpResponseForbidden()
+	try:
+		user = FinderUser.objects.get(user_id=user_id)
+		item = Item.objects.get(item_id=item_id)
+	except FinderUser.DoesNotExist:
+		return flashHomeMessage(request, 'Sorry, we could\'t find a user by that specification')
+	except Item.DoesNotExist:
+		return flashHomeMessage(request, 'Sorry, we could\'t find an item by that specification')
 
 	# mark the item as found here
 	if item.status == Item.ITEM_LOST:
