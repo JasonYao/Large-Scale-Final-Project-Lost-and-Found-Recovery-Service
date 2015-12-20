@@ -9,7 +9,7 @@
 {% block content %}
 <div>
 	<h1>Are you sure you want to delete {{ item.name }}?</h1>
-	<form action="{% url 'my_qrcode:item_delete' item.id %}" method="post">
+	<form action="{% url 'my_qrcode:item_delete' item.item_id %}" method="post">
 	{% csrf_token %}
   	<input type="submit" value="Delete" />
 	</form>
