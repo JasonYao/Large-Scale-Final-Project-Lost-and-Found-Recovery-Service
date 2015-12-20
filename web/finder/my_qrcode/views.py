@@ -17,7 +17,8 @@ def createFinderUser(user):
 		email=user.email)
 	u.save()
 
-def generate_item_id():
+def generate_item_id(user_id):
+	# TODO: Fix! Check all items in all shards or keep last item id so that we can increment it, unless that doesn't matter
 	last_item = Item.objects.all().order_by('-pk')
 	if len(last_item) > 0:
 		return last_item[0].item_id + 1
@@ -168,10 +169,10 @@ def add_item(request):
 			new_item.status = Item.ITEM_NOT_LOST
 
 			# set item id
-			item_id = generate_item_id()
+			item_id = generate_item_id(user.user_id)
 
 			while len(Item.objects.filter(item_id=item_id)):
-				item_id = generate_item_id()
+				item_id = generate_item_id(user.user_id)
 
 			new_item.item_id = item_id
 
