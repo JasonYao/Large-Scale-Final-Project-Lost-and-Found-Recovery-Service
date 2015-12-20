@@ -102,20 +102,20 @@ def add_item(request):
 
 		if form.is_valid():
 			new_item = form.save(commit=False)
-    		new_item.owner = user
-    		new_item.status = Item.ITEM_NOT_LOST
+			new_item.owner = user
+			new_item.status = Item.ITEM_NOT_LOST
 
-    		# set item id
-    		item_id = generate_item_id()
+			# set item id
+			item_id = generate_item_id()
 
-    		while len(Item.objects.filter(item_id=item_id)):
-    			item_id = generate_item_id()
+			while len(Item.objects.filter(item_id=item_id)):
+				item_id = generate_item_id()
 
-    		new_item.item_id = item_id
-    		
-    		new_item.save()
+			new_item.item_id = item_id
 
-    		return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
+			new_item.save()
+
+			return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
 	else:
 		form = ItemForm
 
@@ -140,11 +140,10 @@ def edit_item(request, item_id):
 
 		if form.is_valid():
 			new_item = form.save(commit=False)
-    		new_item.save()
-
-    		return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
+			new_item.save()
+			return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
 	else:
-		form = ItemForm(instance=item)
+		form = ItemForm(instance=item, initial={'mark_lost': (item.status == Item.ITEM_LOST),})
 
 	context = {
 		'user': user,
@@ -202,6 +201,8 @@ def found(request, user_id, item_id):
 		return HttpResponseForbidden()
 
 	# mark the item as found here
+	if item.status == Item.ITEM_LOST:
+		item.status = Item.ITEM_FOUND
 
 	context = {
 		'user': user,
