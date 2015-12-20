@@ -134,3 +134,22 @@ def edit_item(request, item_id):
 		'item_id': item_id,
 	}
 	return render(request, 'qrcode/item_edit.html', context)
+
+@login_required
+def generate(request, item_id):
+
+	user = request.user
+	item = get_object_or_404(Item, id=item_id)
+
+	if item.user_id != user.id:
+		return HttpResponseForbidden()
+
+	# this is where we'll create the qrcode
+	qr_url = '/items/' + str(item_id) + '/' # make this the full site url, for now leave it as this dummy url
+
+	context = {
+		'user': user,
+		'item_id': item_id,
+		'qr_url': qr_url,
+	}
+	return render(request, 'qrcode/generate.html', context)
