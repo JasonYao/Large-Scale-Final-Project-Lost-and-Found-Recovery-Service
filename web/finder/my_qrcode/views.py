@@ -12,13 +12,13 @@ from routers import bucket_users_into_shards
 
 # helper functions
 def createFinderUser(user):
-	u = FinderUser(
-		user_id=user.id, username=user.username, 
-		email=user.email)
+	u = FinderUser(user_id=user.id, username=user.username, email=user.email)
 	u.save()
 
 def generate_item_id(user_id):
-	# TODO: Fix! Check all items in all shards or keep last item id so that we can increment it, unless that doesn't matter
+	# avash why do we grab all items instead of just one, limit 1
+	# TODO: Fix! Check all items in all shards or keep last item id 
+	# so that we can increment it, unless that doesn't matter
 	last_item = Item.objects.all().order_by('-pk')
 	if len(last_item) > 0:
 		return last_item[0].item_id + 1
@@ -38,7 +38,7 @@ def index(request, message = None):
 		'user': user,
 		'message': message,
 	}
-	return render(request, 'my_qrcode/home.html', context)
+	return render(request, 'my_qrcode/home.html', context)	
 
 
 def public_profile(request, parameter_user_id):
@@ -107,8 +107,7 @@ def register(request):
 			# Create a mirror sharded User model.
 			createFinderUser(new_user)
 			# Log in that user.
-			user = authenticate(username=new_user.username,
-				password=form.clean_password2())
+			user = authenticate(username=new_user.username, password=form.clean_password2())
 			if user is not None:
 				login(request, user)
 			else:
@@ -131,7 +130,8 @@ def profile(request):
 
 	user = request.user
 
-	# TODO: a FinderUser is not created when a super user is created, so we always make one for the user here
+	# TODO: a FinderUser is not created when a super user is created, 
+	# so we always make one for the user here
 	try:
 		# get user from shard
 		user_query = FinderUser.objects
@@ -299,7 +299,9 @@ def generate(request, item_id):
 		return flashHomeMessage(request, 'This isn\'t your item')
 
 	# this is where we'll create the qrcode
-	qr_url = '/found/' + str(user.user_id) + '/' + str(item_id) + '/' # make this the full site url, for now leave it as this dummy url
+	# make this the full site url, for now leave it as this dummy url
+	qr_url = '/found/' + str(user.user_id) + '/' + str(item_id) + '/' 
+	
 	qr_uri = request.build_absolute_uri(qr_url) # the full absolute uri to be sent to the qrcode app
 
 	# generate the qr_code
