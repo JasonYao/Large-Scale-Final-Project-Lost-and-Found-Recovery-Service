@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
 	url('^', include('my_qrcode.urls', namespace="my_qrcode")),
     url(r'^admin/', admin.site.urls),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # static files (images, css, javascript, etc.), served from django when DEBUG=True, else from webserver

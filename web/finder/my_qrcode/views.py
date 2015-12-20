@@ -5,6 +5,8 @@ from my_qrcode.models import Item, FinderUser
 from my_qrcode.forms import CustomUserCreationForm, ItemForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
+from qrcode import * # needs Python Image Library (PIL)
+from django.conf import settings
 
 # helper functions
 def createFinderUser(user):
@@ -184,6 +186,9 @@ def generate(request, item_id):
 	# this is where we'll create the qrcode
 	qr_url = '/found/' + str(user.user_id) + '/' + str(item_id) + '/' # make this the full site url, for now leave it as this dummy url
 	qr_uri = request.build_absolute_uri(qr_url) # the full absolute uri to be sent to the qrcode app
+
+	# generate the qr_code
+	
 
 	context = {
 		'user': user,

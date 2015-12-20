@@ -5,7 +5,7 @@ DATABASES = {
         'NAME': 'finder',
         'USER': 'finder',
         'PASSWORD': 'Paz*1C40!3h@SB4dxg2tR%R2n5EnriLgBZgMpAjdpOdoKum#8M4UgLFjQ%h39oRXUur6nQt6v4aEPyA$E%9aqArsYOfe4IM@H49M',
-        'HOST': '',
+        'HOST': '127.0.0.1',
         'PORT': '',
     }
 }

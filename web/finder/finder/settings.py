@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'qrcode',
+    #'qrcode',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -123,3 +123,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/profile/'
 
+# media roots
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+
+MEDIA_URL = '/media/'
