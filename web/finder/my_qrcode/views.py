@@ -7,6 +7,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 import qrcode # needs Python Image Library (PIL)
 from django.conf import settings
+from utils.hints import set_user_for_sharding
+from routers import bucket_users_into_shards
 
 # helper functions
 def createFinderUser(user):
@@ -40,8 +42,14 @@ def index(request, message = None):
 
 def public_profile(request, parameter_user_id):
 	try:
-		user = FinderUser.objects.get(user_id=parameter_user_id)
-		items = Item.objects.filter(owner=user)
+		# query user shards
+		user_query = FinderUser.objects
+		set_user_for_sharding(user_query, parameter_user_id)
+		user = user_query.get(user_id=parameter_user_id)
+		# query items shards
+		item_query = Item.objects
+		set_user_for_sharding(item_query, parameter_user_id)
+		item = item_query.filter(owner=user)
 		context = {
         	'user': user,
         	'items': items,
@@ -89,12 +97,21 @@ def profile(request):
 
 	# TODO: a FinderUser is not created when a super user is created, so we always make one for the user here
 	try:
-		finderUser = FinderUser.objects.get(user_id=user.id)
+		# get user from shard
+		user_query = FinderUser.objects
+		set_user_for_sharding(user_query, user.id)
+		finderUser = user_query.get(user_id=user.id)
 	except FinderUser.DoesNotExist:
 		createFinderUser(user)
-		finderUser = FinderUser.objects.get(user_id=user.id)
+		# get user from shard
+		user_query = FinderUser.objects
+		set_user_for_sharding(user_query, user.id)
+		finderUser = user_query.get(user_id=user.id)
 
-	items = Item.objects.filter(owner=finderUser)
+	# get item from shard
+	item_query = Item.objects
+	set_user_for_sharding(item_query, user.id)
+	items = item_query.filter(owner=finderUser)
 
 	context = {
 		'user': finderUser,
@@ -106,8 +123,14 @@ def item(request, user_id, item_id):
 	'''List of recent posts by people I follow'''
 
 	try:
-		user = FinderUser.objects.get(user_id=user_id)
-		item = Item.objects.get(item_id=item_id)
+		# query user
+		user_query = FinderUser.objects
+		set_user_for_sharding(user_query, user_id)
+		user = user_query.get(user_id=user_id)
+		# query items
+		item_query = Item.objects
+		set_user_for_sharding(item_query, user_id)
+		item = item_query.get(item_id=item_id)
 	except FinderUser.DoesNotExist:
 		return flashHomeMessage(request, 'Sorry, we could\'t find a user by that specification')
 	except Item.DoesNotExist:
@@ -115,7 +138,8 @@ def item(request, user_id, item_id):
 
 	if item.is_public == False:
 		if request.user.is_authenticated():
-			logged_in_user = FinderUser.objects.get(user_id=request.user.id)
+			set_user_for_sharding(user_query, user_id)
+			logged_in_user = user_query.get(user_id=request.user.id)
 			if item.owner != logged_in_user:
 				return flashHomeMessage(request, 'This is not your item so you unfortunately can\'t view it')
 		else:
@@ -131,7 +155,9 @@ def item(request, user_id, item_id):
 def add_item(request):
 	'''List of recent posts by people I follow'''
 
-	user = FinderUser.objects.get(user_id=request.user.id)
+	user_query = FinderUser.objects
+	set_user_for_sharding(user_query, request.user.id)
+	user = user_query.get(user_id=request.user.id)
 
 	if request.method == 'POST':
 		form = ItemForm(request.POST)
@@ -165,8 +191,15 @@ def add_item(request):
 def edit_item(request, item_id):
 	'''List of recent posts by people I follow'''
 
-	user = FinderUser.objects.get(user_id=request.user.id)
-	item = get_object_or_404(Item, item_id=item_id)
+	# get user from shard
+	user_query = FinderUser.objects
+	set_user_for_sharding(user_query, request.user.id)
+	user = user_query.get(user_id=request.user.id)
+	# get item from shard
+	#item = get_object_or_404(Item, item_id=item_id)
+	item_query = Item.objects
+	set_user_for_sharding(item_query, request.user.id)
+	item = item_query.get(item_id=item_id)
 
 	if item.owner != user:
 		return flashHomeMessage(request, 'This isn\'t your item')
@@ -192,8 +225,14 @@ def edit_item(request, item_id):
 def delete_item(request, item_id):
 	'''List of recent posts by people I follow'''
 
-	user = FinderUser.objects.get(user_id=request.user.id)
-	item = get_object_or_404(Item, item_id=item_id)
+	# get user from shard
+	user_query = FinderUser.objects
+	set_user_for_sharding(user_query, request.user.id)
+	user = user_query.get(user_id=request.user.id)
+	# get item from shard
+	item_query = Item.objects
+	set_user_for_sharding(item_query, request.user.id)
+	item = item_query.get(item_id=item_id)
 
 	if item.owner != user:
 		return flashHomeMessage(request, 'This isn\'t your item')
@@ -211,8 +250,14 @@ def delete_item(request, item_id):
 @login_required
 def generate(request, item_id):
 
-	user = FinderUser.objects.get(user_id=request.user.id)
-	item = get_object_or_404(Item, item_id=item_id)
+	# get user from shard
+	user_query = FinderUser.objects
+	set_user_for_sharding(user_query, request.user.id)
+	user = user_query.get(user_id=request.user.id)
+	# get item from shard
+	item_query = Item.objects
+	set_user_for_sharding(item_query, request.user.id)
+	item = item_query.get(item_id=item_id)
 
 	if item.owner != user:
 		return flashHomeMessage(request, 'This isn\'t your item')
@@ -237,8 +282,15 @@ def generate(request, item_id):
 def found(request, user_id, item_id):
 
 	try:
-		user = FinderUser.objects.get(user_id=user_id)
-		item = Item.objects.get(item_id=item_id)
+		# get user from shard
+		user_query = FinderUser.objects
+		set_user_for_sharding(user_query, user_id)
+		user = user_query.get(user_id=user_id)
+		# get item from shard
+		#item = get_object_or_404(Item, item_id=item_id)
+		item_query = Item.objects
+		set_user_for_sharding(item_query, user_id)
+		item = item_query.get(item_id=item_id)
 	except FinderUser.DoesNotExist:
 		return flashHomeMessage(request, 'Sorry, we could\'t find a user by that specification')
 	except Item.DoesNotExist:
@@ -247,6 +299,7 @@ def found(request, user_id, item_id):
 	# mark the item as found here
 	if item.status == Item.ITEM_LOST:
 		item.status = Item.ITEM_FOUND
+		item.save()
 
 	context = {
 		'user': user,

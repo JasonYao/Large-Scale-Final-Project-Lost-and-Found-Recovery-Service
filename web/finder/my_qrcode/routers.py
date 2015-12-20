@@ -1,4 +1,4 @@
-NUM_LOGICAL_SHARDS = 16
+NUM_LOGICAL_SHARDS = 1024
 NUM_PHYSICAL_SHARDS = 2
 
 LOGICAL_TO_PHYSICAL = (
@@ -23,7 +23,11 @@ def bucket_users_into_shards(user_ids):
 def logical_to_physical(logical):
   if logical >= NUM_LOGICAL_SHARDS or logical < 0:
     raise Exception("shard out of bounds %d" % logical)
-  return LOGICAL_TO_PHYSICAL[logical] 
+  #return LOGICAL_TO_PHYSICAL[logical] 
+  if logical % NUM_PHYSICAL_SHARDS == 0:
+    return 'db1'
+  else:
+    return 'db2'
  
 def logical_shard_for_user(user_id):
   print "Looking for shard for user %d" % user_id
@@ -45,10 +49,13 @@ class UserRouter(object):
     db = None    
     try:
       instance = hints['instance']
-      db = self._database_of(instance.user_id)
+      db = self._database_of(instance.owner_id) # this is an instance of Item, using the field owner_id
     except AttributeError:
       # For the user model the key is id.
-      db = self._database_of(instance.id)
+      try:
+        db = self._database_of(instance.user_id)
+      except AttributeError:
+        db = self._database_of(instance.id)
     except KeyError:
       try:
         db = self._database_of(int(hints['user_id']))
