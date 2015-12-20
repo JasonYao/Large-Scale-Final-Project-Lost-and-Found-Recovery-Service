@@ -1,0 +1,20 @@
+{% extends "my_qrcode/base.html" %}
+{% load humanize %}
+{% load staticfiles %}
+
+{% block nav %}
+{% endblock %}
+
+{% block content %}
+<div>
+  <p>Profile of user: {{ user.username }}</p>
+
+  <ul>
+  	{% for item in items %}
+		{% if item.is_public %}
+			<li>{{ item.name }}</li>
+		{% endif %}
+  	{% endfor %}
+  </ul>
+</div>
+{% endblock %}
