@@ -1,5 +1,8 @@
 {% extends 'my_qrcode/base.html' %}
 
 {% block content %}
+{% if message %}
+<div class="flash-message"><p>{{ message }}</p></div>
+{% endif %}
 Home
 {% endblock %}

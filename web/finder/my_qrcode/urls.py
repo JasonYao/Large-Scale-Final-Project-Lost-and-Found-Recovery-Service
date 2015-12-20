@@ -18,7 +18,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    url(r'^$', views.index, name='home'),
+    url(r'^$', views.index, {'message': None}, name='home'),
     url(r'^register/$', views.register, name='register'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^items/(?P<user_id>[0-9]+)/(?P<item_id>[0-9]+)/$', views.item, name='item'),
