@@ -114,7 +114,7 @@ def edit_item(request, item_id):
 	user = FinderUser.objects.get(user_id=request.user.id)
 	item = get_object_or_404(Item, id=item_id)
 
-	if item.user_id != user.id:
+	if item.user_id != user.user_id:
 		return HttpResponseForbidden()
 
 	if request.method == 'POST':
@@ -136,16 +136,36 @@ def edit_item(request, item_id):
 	return render(request, 'my_qrcode/item_edit.html', context)
 
 @login_required
+def delete_item(request, item_id):
+	'''List of recent posts by people I follow'''
+
+	user = FinderUser.objects.get(user_id=request.user.id)
+	item = get_object_or_404(Item, id=item_id)
+
+	if item.user_id != user.user_id:
+		return HttpResponseForbidden()
+
+	if request.method == 'POST':
+		item.delete()    	
+		return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
+
+	context = {
+		'user': user,
+		'item': item,
+	}
+	return render(request, 'my_qrcode/item_delete.html', context)
+
+@login_required
 def generate(request, item_id):
 
 	user = FinderUser.objects.get(user_id=request.user.id)
 	item = get_object_or_404(Item, id=item_id)
 
-	if item.user_id != user.id:
+	if item.user_id != user.user_id:
 		return HttpResponseForbidden()
 
 	# this is where we'll create the qrcode
-	qr_url = '/found/' + str(user.id) + '/' + str(item_id) + '/' # make this the full site url, for now leave it as this dummy url
+	qr_url = '/found/' + str(user.user_id) + '/' + str(item_id) + '/' # make this the full site url, for now leave it as this dummy url
 	qr_uri = request.build_absolute_uri(qr_url) # the full absolute uri to be sent to the qrcode app
 
 	context = {

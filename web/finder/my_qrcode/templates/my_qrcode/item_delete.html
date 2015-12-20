@@ -1,0 +1,18 @@
+{% extends "my_qrcode/base.html" %}
+{% load humanize %}
+{% load staticfiles %}
+
+{% block nav %}
+<a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+<div>
+	<h1>Are you sure you want to delete {{ item.name }}?</h1>
+	<form action="{% url 'my_qrcode:item_delete' item.id %}" method="post">
+	{% csrf_token %}
+  	<input type="submit" value="Delete" />
+	</form>
+	<a href="{% url 'my_qrcode:profile' %}">Back</a>
+</div>
+{% endblock %}
