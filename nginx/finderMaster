@@ -19,6 +19,10 @@ server {
         root /finder/web/finder;
     }
 
+	location /media/ {
+		root /finder/web/finder;
+	}
+
 	# Actually serves through the uwsgi protocol via a unix socket
 	location / {
 		include         uwsgi_params;
