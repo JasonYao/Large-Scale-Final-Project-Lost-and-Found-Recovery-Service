@@ -10,7 +10,7 @@
 <div>
   <h1>Print the QR Image</h1>
   <p>
-  	QR IMAGE GOES HERE USING THE URL PASSED IN: {{ qr_url }}
+  	{% qr_from_text qr_url l %}
   </p>
 </div>
 {% endblock %}
