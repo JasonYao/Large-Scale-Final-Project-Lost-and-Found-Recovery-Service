@@ -8,6 +8,7 @@
     <li><a href="{% url 'my_qrcode:register' %}">Register</a></li>
 {% endblock %}
 
+{% block content %}
     <form method="post" action={% url 'my_qrcode:login' %}>
     {% csrf_token %}
         <form action="{% url 'my_qrcode:login' %}" method="post" id="login_form" class="">
