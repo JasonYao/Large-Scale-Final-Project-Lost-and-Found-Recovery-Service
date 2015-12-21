@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-    <h3>{{ user.username }}'s things.</h3>
+    <h3><em>{{ user.username }}'s</em> things.</h3>
 
     <a href="{% url 'my_qrcode:item_add' %}"><button id="add_item">Add Item</button></a>
     <table>
