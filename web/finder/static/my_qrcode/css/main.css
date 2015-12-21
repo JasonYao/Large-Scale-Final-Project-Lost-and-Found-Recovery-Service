@@ -140,6 +140,7 @@ button {
 
 body {font-family: 'Open Sans', sans-serif; font-size: 16px;}
 body#register {background: #781CA7;}
+body#inside {}
 
 nav {background: #781CA7; border-bottom: 1px solid #9D3FCE;}
 
@@ -162,8 +163,8 @@ div#wrapper {margin: 20px;}
 table {border: 2px solid #444; width: 760px;}
     table tr {border-bottom: 1px solid #ccc}
     tr:first-child {height: 40px;}
-        table button {width: 20px; height: 20px; border: none; padding: 0;}
-        td.menued {border-right: 1px solid #ccc; width: 20px; padding: 0 5px;}
+        table td a button {width: 0; height: 20px; border: none; padding: 0;}
+        td.menued {border-right: 1px solid #ccc; width: 0px; padding: 0 5px;}
         
         td:last-child button {width: 120px; height: 30px; color: #fff; background: #D9534F; line-height: 30px; 
             margin: 0; border: 1px solid #912422; font-size: 14px; font-variant: small-caps; text-align: center;}
@@ -177,6 +178,13 @@ table {border: 2px solid #444; width: 760px;}
  button#add_item {margin-bottom: 20px;}
 
 p.error {display: inline-block; padding: 5px 10px; background: #F57A7A; border: 1px solid #6F2323;}
+button#add_item {color: #000;}
+td.lost {background: red;}
+a {margin-right: 0; padding-right: 0;}
+
+body#inside h3 {color: #000; margin-bottom: 20px; font-size: 36px;}
+
+input[type=checkbox] {display: inline-block; }
 
 /* ==========================================================================
    Helper classes

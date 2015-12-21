@@ -2,16 +2,21 @@
 {% load humanize %}
 {% load staticfiles %}
 
+{% block bcss %}inside{% endblock %}
+
 {% block nav %}
-<a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
+    <li><a href="{% url 'my_qrcode:profile' %}">Profile</a></li>
+    <li><a href="{% url 'my_qrcode:logout' %}">Log Out</a></li>
 {% endblock %}
 
 {% block content %}
 <div>
 	<form action="/add/" method="post">
-	{% csrf_token %}
-  	{{ form.as_p }}
-  	<input type="submit" value="Submit" />
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <!-- <input type="submit" value="Submit" /> -->
+        <button type="submit" value="Submit">Add Item</button>
 	</form>
 </div>
 {% endblock %}

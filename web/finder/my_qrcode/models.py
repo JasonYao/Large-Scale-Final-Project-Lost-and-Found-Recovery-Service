@@ -6,8 +6,7 @@ from django.db import models
 class FinderUser(models.Model):
     user_id = models.BigIntegerField(primary_key=True)
     username = models.CharField(max_length=30, unique=True)
-    email = models.CharField('email address', max_length=256, blank=True)
-
+    email = models.CharField('email address', max_length=255, unique=True)
 
 class Item(models.Model):
     item_id = models.BigIntegerField(primary_key=True)

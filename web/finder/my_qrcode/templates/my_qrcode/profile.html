@@ -2,18 +2,39 @@
 {% load humanize %}
 {% load staticfiles %}
 
+{% block bcss %}inside{% endblock %}
+
 {% block nav %}
-{{ request.user.username }}, <a href="{% url 'my_qrcode:item_add' %}">Add New Item</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
+    <li><a href="{% url 'my_qrcode:profile' %}">Profile</a></li>
+    <li><a href="{% url 'my_qrcode:logout' %}">Log Out</a></li>
 {% endblock %}
 
 {% block content %}
-<div>
-  <p>Welcome to your profile {{ user.username }}</p>
+    <h3>{{ user.username }}'s things.</h3>
 
-  <ul>
-  	{% for item in items %}
-  	<li>{{ item.name }} - <a href="{% url 'my_qrcode:item' user.user_id item.item_id %}">View Item</a> | <a href="{% url 'my_qrcode:item_edit' item.item_id %}">Edit</a> | <a href="{% url 'my_qrcode:generate' item.item_id %}">Generate Qr </a> | <a href="{% url 'my_qrcode:item_delete' item.item_id %}">Delete</a>{% if item.status == 'L' %} <b>Lost</b>{% endif %}</li>
-  	{% endfor %}
-  </ul>
+    <a href="{% url 'my_qrcode:item_add' %}"><button id="add_item">Add Item</button></a>
+    <table>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Item Name</th>
+            <th></th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td class="menued"><a href="{% url 'my_qrcode:item_edit' item.item_id %}">
+                <button name="edit_item_id"></button>
+            </a></td>            
+            <td col width="0" class="menued"><a href="{% url 'my_qrcode:item_delete' item.item_id %}">
+                <button name="del_item_id"></button>
+            </a></td>
+            <td class="menued {% if item.status == 'L' %}lost{% endif %}">
+                <a href="{% url 'my_qrcode:item' user.user_id item.item_id %}">{{ item.name }}</a>
+            </td>
+            <td class="menued"><a href="{% url 'my_qrcode:generate' item.item_id %}">Generate QR</a></td>
+            <!-- <td class="menued"><button name="report_item_id">Report Lost</button></td> -->
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}

@@ -1,5 +1,7 @@
 {% extends "my_qrcode/base.html" %}
 
+{% block bcss %}register{% endblock %}
+
 {% block nav %}
     <li><a href="{% url 'my_qrcode:login' %}">Login</a></li>
 {% endblock %}

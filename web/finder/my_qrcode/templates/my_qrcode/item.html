@@ -3,11 +3,11 @@
 {% load staticfiles %}
 
 {% block nav %}
-<a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
+    <li><a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a></li>
 {% endblock %}
 
 {% block content %}
 <div>
-  <h1>{{ item.name }}</h1>
+    <h1>{{ item.name }}</h1>
 </div>
 {% endblock %}

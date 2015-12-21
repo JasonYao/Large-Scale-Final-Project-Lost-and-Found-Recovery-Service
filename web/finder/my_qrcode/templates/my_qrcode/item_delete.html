@@ -2,17 +2,20 @@
 {% load humanize %}
 {% load staticfiles %}
 
+{% block bcss %}inside{% endblock %}
+
 {% block nav %}
-<a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
+    <li><a href="{% url 'my_qrcode:profile' %}">Profile</a></li>
+    <li><a href="{% url 'my_qrcode:logout' %}">Log Out</a></li>
 {% endblock %}
 
 {% block content %}
 <div>
-	<h1>Are you sure you want to delete {{ item.name }}?</h1>
+	<h3>Are you sure you want to delete "{{ item.name }}"?</h3>
 	<form action="{% url 'my_qrcode:item_delete' item.item_id %}" method="post">
-	{% csrf_token %}
-  	<input type="submit" value="Delete" />
+	   {% csrf_token %}
+        <!-- <input type="submit" value="Delete" /> -->
+        <button type="submit" value="Delete">Delete Item</button>
 	</form>
-	<a href="{% url 'my_qrcode:profile' %}">Back</a>
 </div>
 {% endblock %}

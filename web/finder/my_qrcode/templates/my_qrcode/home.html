@@ -1,5 +1,7 @@
 {% extends "my_qrcode/base.html" %}
 
+{% block bcss %}register{% endblock %}
+
 {% if message %}
     <div class="flash-message"><p>{{ message }}</p></div>
 {% endif %}
