@@ -34,7 +34,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 class ItemForm(ModelForm):
   mark_lost = forms.BooleanField(label='Mark Item Lost?', required=False)
-  
+
   class Meta:
     model = Item
     fields = ('name', 'is_public', 'mark_lost',)
