@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from my_qrcode.models import Item, FinderUser
 from my_qrcode.forms import CustomUserCreationForm, ItemForm
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 import qrcode # needs Python Image Library (PIL)
 from django.conf import settings
 from utils.hints import set_user_for_sharding
@@ -13,6 +13,7 @@ from django.core.cache import caches #, cache
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
+from django.views.decorators.cache import cache_page
 
 # helper functions
 def createFinderUser(user):
@@ -382,6 +383,7 @@ def delete_item(request, item_id):
 	return render(request, 'my_qrcode/item_delete.html', context)
 
 @login_required
+#@cache_page(60 * 15, cache="per_view") # cache each generate page so that we only have to generate the image once, but if there's an error, that gets cached
 def generate(request, item_id):
 	# get user from shard
 	user = get_user_from_cache(request.user.id)
@@ -403,16 +405,18 @@ def generate(request, item_id):
 	
 	qr_uri = request.build_absolute_uri(qr_url) # the full absolute uri to be sent to the qrcode app
 
-	# generate the qr_code
-	img = qrcode.make(qr_uri)
-	qr_filename = 'qr_' + str(item.item_id) + '.png'
-	img.save(settings.MEDIA_ROOT + qr_filename)
+	# # generate the qr_code
+	# img = qrcode.make(qr_uri)
+	# qr_filename = 'qr_' + str(item.item_id) + '.png'
+	# img.save(settings.MEDIA_ROOT + qr_filename)
 
 	context = {
 		'user': user,
 		'item_id': item_id,
 		'qr_url': qr_uri,
-		'qr_image_source_url': settings.MEDIA_URL + qr_filename
+		#'qr_image_source_url': settings.MEDIA_URL + qr_filename,
+		'qr_image_source_url': reverse('my_qrcode:generate_qr', args=(item_id)),
+		'cache_timeout': 2419200, # 4 weeks in seconds
 	}
 	return render(request, 'my_qrcode/generate.html', context)
 
@@ -447,3 +451,29 @@ def found(request, user_id, item_id):
 		'item': item,
 	}
 	return render(request, 'my_qrcode/found.html', context)
+
+@login_required
+@cache_page(60 * 60 *24 *14, cache="per_view") # cache each generate page so that we only have to generate the image once, but if there's an error, that gets cached
+# we cache this partial view in the generate.html file
+def generate_qr_image(request, item_id):
+	# get user from shard
+	user = get_user_from_cache(request.user.id)
+	# get item from shard
+	# item_query = Item.objects
+	# set_user_for_sharding(item_query, request.user.id)
+	# item = item_query.get(item_id=item_id)
+	item = get_item_from_cache(item_id, request.user.id) # pass in the user_id as a backup to get the item from the db if it does not exist
+
+	# this is where we'll create the qrcode
+	# make this the full site url, for now leave it as this dummy url
+	qr_url = '/found/' + str(user.user_id) + '/' + str(item_id) + '/' 
+	
+	qr_uri = request.build_absolute_uri(qr_url) # the full absolute uri to be sent to the qrcode app
+
+	# generate the qr_code
+	img = qrcode.make(qr_uri)
+	qr_filename = 'qr_' + str(item.item_id) + '.png'
+	#img.save(settings.MEDIA_ROOT + qr_filename)
+	response = HttpResponse(content_type="image/png")
+	img.save(response, "PNG")
+	return response

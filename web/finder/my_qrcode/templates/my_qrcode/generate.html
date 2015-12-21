@@ -1,6 +1,7 @@
 {% extends "my_qrcode/base.html" %}
 {% load humanize %}
 {% load staticfiles %}
+{% load cache %}
 
 {% block bcss %}inside{% endblock %}
 
@@ -14,5 +15,10 @@
     <h3>Your QR Image</h3>
     <p>Print this and place in on the item you wish to track.</p>
     <img src="{{ qr_image_source_url }}" />
+    {% comment %}
+    {% cache cache_timeout qr_image user.user_id item_id using="per_view" %}
+    <img src="{{ qr_image_source_url }}" />
+    {% endcache %}
+    {% endcomment %}
 </div>
 {% endblock %}

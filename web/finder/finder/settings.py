@@ -149,6 +149,11 @@ CACHES = { # for finderuser data and items
         'LOCATION': 'unique-snowflake-items', # since we have more than one locmemcache
         'TIMEOUT': None,
     },
+    'per_view': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake-views', # since we have more than one locmemcache
+        'TIMEOUT': None,        
+    },
 }
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db' # so that sessions are stored in the cache
