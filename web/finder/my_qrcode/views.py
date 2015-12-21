@@ -12,6 +12,7 @@ from routers import bucket_users_into_shards
 from django.core.cache import caches #, cache
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django import forms
 
 # helper functions
 def createFinderUser(user):
@@ -309,7 +310,8 @@ def add_item(request):
 
 			return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
 	else:
-		form = ItemForm
+		form = ItemForm()
+		form.fields['mark_lost'].widget = forms.HiddenInput() # hide mark_lost for adding
 
 	context = {
 		'user': user,

@@ -24,6 +24,7 @@
             </nav>
         </header>    
         <div id="wrapper">
+            {% block flash_message %}{% endblock %}
             {% block promo %}{% endblock %}
             <div>{% block content %}{% endblock %}</div>
         </div>

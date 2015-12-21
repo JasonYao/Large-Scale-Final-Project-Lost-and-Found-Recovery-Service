@@ -2,9 +2,11 @@
 
 {% block bcss %}register{% endblock %}
 
-{% if message %}
-    <div class="flash-message"><p>{{ message }}</p></div>
-{% endif %}
+{% block flash_message %}
+	{% if message %}
+	    <div class="flash-message"><p>{{ message }}</p></div>
+	{% endif %}
+{% endblock %}
 
 {% block nav %}
     <li><a href="{% url 'my_qrcode:register' %}">Register</a></li>
