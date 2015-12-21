@@ -1,10 +1,10 @@
 NUM_LOGICAL_SHARDS = 1024
 NUM_PHYSICAL_SHARDS = 2
 
-LOGICAL_TO_PHYSICAL = (
-  'db1', 'db2', 'db1', 'db2', 'db1', 'db2', 'db1', 'db2',
-  'db1', 'db2', 'db1', 'db2', 'db1', 'db2', 'db1', 'db2',
-)
+# LOGICAL_TO_PHYSICAL = (
+#   'db1', 'db2', 'db1', 'db2', 'db1', 'db2', 'db1', 'db2',
+#   'db1', 'db2', 'db1', 'db2', 'db1', 'db2', 'db1', 'db2',
+# )
 
 # returns a dictionary mapping a shard to all the users in that shard
 # from user_ids.
@@ -19,6 +19,15 @@ def bucket_users_into_shards(user_ids):
     
   
   return [str(x) for x in range(NUM_LOGICAL_SHARDS)]
+
+def get_all_shards():
+  # d = []
+  # for x in range(0, 1024):
+  #   d.append(x)
+
+  #return [str(x) for x in range(NUM_LOGICAL_SHARDS)]
+  # since the physical db size is small (2) and fixed, we can just return the physical shards since the logical shards are evenly distributed between the two physical shards
+  return [str(x) for x in range(NUM_PHYSICAL_SHARDS)]
 
 def logical_to_physical(logical):
   if logical >= NUM_LOGICAL_SHARDS or logical < 0:

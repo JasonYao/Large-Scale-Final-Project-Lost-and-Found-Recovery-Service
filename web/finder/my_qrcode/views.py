@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 import qrcode # needs Python Image Library (PIL)
 from django.conf import settings
 from utils.hints import set_user_for_sharding
-from routers import bucket_users_into_shards
+from routers import bucket_users_into_shards, get_all_shards
 from django import forms
 
 # helper functions
@@ -17,10 +17,18 @@ def createFinderUser(user):
 	u.save()
 
 def generate_item_id(user_id):
-	# avash: why do we grab all items instead of just one, limit 1
-	# TODO: Fix! Check all items in all shards or keep last item id 
+	# Check all items in all shards or keep last item id 
 	# so that we can increment it, unless that doesn't matter
-	last_item = Item.objects.all().order_by('-pk')
+	shards_to_query = get_all_shards()
+	all_items = []
+	for shard in shards_to_query:   
+		item_list = Item.objects.all().order_by('-pk')
+		set_user_for_sharding(item_list, int(shard))
+		# The list comprehension actually invokes the db query in the QuerySet.
+		if len(item_list) > 0:
+			all_items = all_items + [item_list[0]] # get the item with the highest pk
+	# we just got the highest item pk from each shard
+	last_item = sorted(all_items, key=lambda x: x.pk, reverse=True) # sort the items
 	if len(last_item) > 0:
 		return last_item[0].item_id + 1
 	return 1
