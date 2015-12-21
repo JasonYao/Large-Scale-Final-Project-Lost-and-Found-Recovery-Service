@@ -28,18 +28,18 @@ The application implements an anonymous lost & found service, where:
 - Showcase security & scalability in design & planning of application
 
 virtualenv requirements: 
-Django==1.9
-enum34==1.1.1
-idna==2.0
-ipaddress==1.0.15
-MySQL-python==1.2.5
-Pillow==3.0.0
-pyasn1==0.1.9
-pycparser==2.14
-qrcode==5.1
-six==1.10.0
-uWSGI==2.0.11.2
-wheel==0.24.0
+- Django==1.9
+- enum34==1.1.1
+- idna==2.0
+- ipaddress==1.0.15
+- MySQL-python==1.2.5
+- Pillow==3.0.0
+- pyasn1==0.1.9
+- pycparser==2.14
+- qrcode==5.1
+- six==1.10.0
+- uWSGI==2.0.11.2
+- wheel==0.24.0
 
 ## Technology Stack
 
