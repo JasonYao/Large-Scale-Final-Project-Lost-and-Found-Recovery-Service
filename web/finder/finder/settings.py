@@ -132,3 +132,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 #MEDIA_URL = '/media/'
 MEDIA_URL = os.path.join(BASE_DIR, "media/")
+
+CACHES = { # for finderuser data and items
+    'default': { }, # not used
+    'users': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake-users', # since we only have one locmemcache
+        'TIMEOUT': None,
+    },
+    'items': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake-items', # since we only have one locmemcache
+        'TIMEOUT': None,
+    },
+}
