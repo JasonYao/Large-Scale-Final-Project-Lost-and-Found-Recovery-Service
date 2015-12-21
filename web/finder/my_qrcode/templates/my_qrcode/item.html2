@@ -1,8 +1,10 @@
-<!-- {% extends "micro/base2.html" %}
+{% extends "my_qrcode/base.html" %}
+{% load humanize %}
+{% load staticfiles %}
 
-{% block header %}
-    <a href="{% url 'micro:register' %}">Register</a>
-{% endblock header %} -->
+{% block nav %}
+    <li><a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a></li>
+{% endblock %}
 
 <!doctype html>
 <html class="no-js" lang="">

@@ -4,6 +4,10 @@
     <li><a href="{% url 'my_qrcode:login' %}">Login</a></li>
 {% endblock %}
 
+{% block promo %}
+    <h2>Do you <span>lose</span> your things? Fret not, we <span>find</span> your things! You're welcome.</h2>
+{% endblock %}
+
 {% block content %}
     <form action="/register/" method="post" id="login_form" class="">
         {% csrf_token %}

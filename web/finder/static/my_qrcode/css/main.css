@@ -176,7 +176,7 @@ table {border: 2px solid #444; width: 760px;}
         
  button#add_item {margin-bottom: 20px;}
 
-form {margin: 20px;}
+p.error {display: inline-block; padding: 5px 10px; background: #F57A7A; border: 1px solid #6F2323;}
 
 /* ==========================================================================
    Helper classes
