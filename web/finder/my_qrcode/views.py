@@ -9,6 +9,7 @@ import qrcode # needs Python Image Library (PIL)
 from django.conf import settings
 from utils.hints import set_user_for_sharding
 from routers import bucket_users_into_shards
+from django import forms
 
 # helper functions
 def createFinderUser(user):
@@ -211,7 +212,8 @@ def add_item(request):
 
 			return HttpResponseRedirect(reverse('my_qrcode:profile', args=()))
 	else:
-		form = ItemForm
+		form = ItemForm()
+		form.fields['mark_lost'].widget = forms.HiddenInput() # hide mark_lost for adding
 
 	context = {
 		'user': user,
