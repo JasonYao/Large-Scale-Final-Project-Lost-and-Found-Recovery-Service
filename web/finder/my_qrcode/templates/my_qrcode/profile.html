@@ -21,7 +21,7 @@
             <th></th>
         </tr>
         {% for item in items %}
-        <tr class="{% if item.status == 'L' %}lost{% endif %}">
+        <tr class="{% if item.status == 'L' %}lost{% endif %} {% if item.is_public %}public{% endif %}">
             <td class="menued"><a href="{% url 'my_qrcode:item_edit' item.item_id %}">
                 <button name="edit_item_id"></button>
             </a></td>            
@@ -29,7 +29,7 @@
                 <button name="del_item_id"></button>
             </a></td>
             <td class="menued">{{ item.name }}</td>
-            <td class="menued"><a href="{% url 'my_qrcode:generate' item.item_id %}">Generate QR</a></td>
+            <td class="menued"><a href="{% url 'my_qrcode:generate' item.item_id %}">Generate QR Code</a></td>
             <!-- <td class="menued"><button name="report_item_id">Report Lost</button></td> -->
         </tr>
         {% endfor %}

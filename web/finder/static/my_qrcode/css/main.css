@@ -161,10 +161,10 @@ div#wrapper {margin: 20px;}
     form {background: #e8e8e8; border-radius: 2px; border: 1px solid #fff; float: left; padding: 20px;}
 
 table {border: 2px solid #444; width: 760px;}
-    table tr {border-bottom: 1px solid #ccc; height: 35px;}
+    table tr {border-bottom: 1px solid #444; height: 35px;}
     tr:first-child {height: 40px;}
         table td a button {width: 0; height: 20px; border: none; padding: 0;}
-        td.menued {border-right: 1px solid #ccc; width: 20px; padding: 0 5px;}
+        td.menued {border-right: 1px solid #444; width: 20px; padding: 0 5px;}
         td.menued:first-child {}
         
         td:last-child button {width: 120px; height: 30px; color: #fff; background: #D9534F; line-height: 30px; 
@@ -180,7 +180,9 @@ table {border: 2px solid #444; width: 760px;}
 
 p.error {display: inline-block; padding: 5px 10px; background: #F57A7A; border: 1px solid #6F2323;}
 button#add_item {color: #000;}
-tr.lost {background: #F57A7A;}
+tr.lost {background: #ff49d4;}
+tr.public {background: #61e28c;}
+tr.public.lost {background: #b27087;}
 a {margin-right: 0; padding-right: 0;}
 
 body#inside h3 {color: #000; margin-bottom: 20px; font-size: 36px;}
