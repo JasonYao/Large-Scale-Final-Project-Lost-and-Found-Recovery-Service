@@ -44,6 +44,45 @@ def update_item_cache(sender, instance, **kwargs):
 	item_cache_key = 'qr_item_' + str(instance.item_id)
 	cache.set(item_cache_key, instance)
 
+# get the item from the cache and default to the db if a user_id is sent
+def get_item_from_cache(item_id, user_id = None):
+	cache = caches['items']
+	single_item_cache_key = 'qr_item_' + str(item_id) # have single item cache as well so that
+	item = cache.get(single_item_cache_key)
+	if item is None and user_id is not None:
+		try:
+			item_query = Item.objects
+			set_user_for_sharding(item_query, user_id)
+			item = item_query.get(item_id=item_id)
+			cache.set(single_item_cache_key, item)
+		except Item.DoesNotExist:
+			#return flashHomeMessage(request, 'Sorry, we could\'t find an item by that specification')
+			return None # both the cache and the db were tried
+	else:
+		print 'Item is in cache'
+	return item
+
+# get the user from the cache and default to the db if it's not there
+def get_user_from_cache(user_id):
+	cache = caches['users']
+	user_cach_key = 'qr_user_' + str(user_id)
+	user = cache.get(user_cach_key)
+	if user is None:
+		# get user from shard
+		
+		try:
+			# query user and get him from the shard
+			user_query = FinderUser.objects
+			set_user_for_sharding(user_query, user_id)
+			user = user_query.get(user_id=user_id)
+			cache.set(user_cach_key, user)
+		except FinderUser.DoesNotExist:
+			#return flashHomeMessage(request, 'Sorry, we could\'t find a user by that specification')
+			return None # user was not in cach or in the db
+	else:
+		print 'User is in the cache'
+	return user
+
 # Create your views here.
 
 def index(request, message = None):
@@ -59,25 +98,13 @@ def index(request, message = None):
 
 
 def public_profile(request, parameter_user_id):
-	cache = caches['users']
-	user_cach_key = 'qr_user_' + str(parameter_user_id)
-
 	try:
 		request_user = request.user
 		if request_user == None:
 			# Requesting user is not logged in, will always return public profile views
 
 			# query user shards
-			user = cache.get(user_cach_key)
-			if user is None:
-				# get user from shard
-				user_query = FinderUser.objects
-				set_user_for_sharding(user_query, parameter_user_id)
-				user = user_query.get(user_id=parameter_user_id)
-
-				cache.set(user_cach_key, user)
-			else:
-				print 'User is in the cache'
+			user = get_user_from_cache(parameter_user_id)
 
 			# query items shards
 			item_query = Item.objects
@@ -94,16 +121,7 @@ def public_profile(request, parameter_user_id):
 				# User was matched, shown admin-rights profile page
 
 				# query user shards
-				user = cache.get(user_cach_key)
-				if user is None:
-					# get user from shard
-					user_query = FinderUser.objects
-					set_user_for_sharding(user_query, parameter_user_id)
-					user = user_query.get(user_id=parameter_user_id)
-
-					cache.set(user_cach_key, user)
-				else:
-					print 'User is in the cache'
+				user = get_user_from_cache(parameter_user_id)
 
 				# query items shards
 				item_query = Item.objects
@@ -116,16 +134,7 @@ def public_profile(request, parameter_user_id):
 				return render(request, 'my_qrcode/profile.html', context)
 			else:
 				# query user shards
-				user = cache.get(user_cach_key)
-				if user is None:
-					# get user from shard
-					user_query = FinderUser.objects
-					set_user_for_sharding(user_query, parameter_user_id)
-					user = user_query.get(user_id=parameter_user_id)
-
-					cache.set(user_cach_key, user)
-				else:
-					print 'User is in the cache'
+				user = get_user_from_cache(parameter_user_id)
 
 				# query items shards
 				item_query = Item.objects
@@ -235,34 +244,16 @@ def profile(request):
 def item(request, user_id, item_id):
 	'''List of recent posts by people I follow'''
 
-	cache = caches['users']
-	user_cach_key = 'qr_user_' + str(user_id)
-	finderUser = cache.get(user_cach_key)
-	if finderUser is None:
-		try:
-			# query user
-			user_query = FinderUser.objects
-			set_user_for_sharding(user_query, user_id)
-			user = user_query.get(user_id=user_id)
-			cache.set(user_cach_key, user)
-		except FinderUser.DoesNotExist:
-			return flashHomeMessage(request, 'Sorry, we could\'t find a user by that specification')
-	else:
-		user = finderUser
+	user = get_user_from_cache(user_id)
+	
+	if user is None:
+		return flashHomeMessage(request, 'Sorry, we could\'t find a user by that specification')
+	
 	# query items
-	cache = caches['items']
-	single_item_cache_key = 'qr_item_' + str(item_id) # have single item cache as well so that
-	item = cache.get(single_item_cache_key)
-	if item is None:
-		try:
-			item_query = Item.objects
-			set_user_for_sharding(item_query, user_id)
-			item = item_query.get(item_id=item_id)
-			cache.set(single_item_cache_key, item)
-		except Item.DoesNotExist:
-			return flashHomeMessage(request, 'Sorry, we could\'t find an item by that specification')
-	else:
-		print 'Item is in cache'
+	item = get_item_from_cache(item_id, user_id) # pass in the user_id as a backup to get the item from the db if it does not exist
+
+	if item is None: # this means the cache doesn't have it and (if we passed in the user_id) the db doesn't have it
+		return flashHomeMessage(request, 'Sorry, we could\'t find an item by that specification')
 
 	if item.is_public == False:
 		if request.user.is_authenticated():
@@ -281,9 +272,7 @@ def item(request, user_id, item_id):
 
 @login_required
 def add_item(request):
-	user_query = FinderUser.objects
-	set_user_for_sharding(user_query, request.user.id)
-	user = user_query.get(user_id=request.user.id)
+	user = get_user_from_cache(request.user.id)
 
 	if request.method == 'POST':
 		form = ItemForm(request.POST)
@@ -322,14 +311,16 @@ def add_item(request):
 @login_required
 def edit_item(request, item_id):
 	# get user from shard
-	user_query = FinderUser.objects
-	set_user_for_sharding(user_query, request.user.id)
-	user = user_query.get(user_id=request.user.id)
+	user = get_user_from_cache(request.user.id)
 	# get item from shard
 	#item = get_object_or_404(Item, item_id=item_id)
-	item_query = Item.objects
-	set_user_for_sharding(item_query, request.user.id)
-	item = item_query.get(item_id=item_id)
+	# item_query = Item.objects
+	# set_user_for_sharding(item_query, request.user.id)
+	# item = item_query.get(item_id=item_id)
+	item = get_item_from_cache(item_id, request.user.id) # pass in the user_id as a backup to get the item from the db if it does not exist
+
+	if item is None: # this means the cache doesn't have it and (if we passed in the user_id) the db doesn't have it
+		return flashHomeMessage(request, 'Sorry, we could\'t find an item by that specification')
 
 	if item.owner != user:
 		return flashHomeMessage(request, 'This isn\'t your item')
@@ -358,13 +349,12 @@ def edit_item(request, item_id):
 @login_required
 def delete_item(request, item_id):
 	# get user from shard
-	user_query = FinderUser.objects
-	set_user_for_sharding(user_query, request.user.id)
-	user = user_query.get(user_id=request.user.id)
+	user = get_user_from_cache(request.user.id)
 	# get item from shard
-	item_query = Item.objects
-	set_user_for_sharding(item_query, request.user.id)
-	item = item_query.get(item_id=item_id)
+	item = get_item_from_cache(item_id, request.user.id) # pass in the user_id as a backup to get the item from the db if it does not exist
+
+	if item is None: # this means the cache doesn't have it and (if we passed in the user_id) the db doesn't have it
+		return flashHomeMessage(request, 'Sorry, we could\'t find an item by that specification')
 
 	if item.owner != user:
 		return flashHomeMessage(request, 'This isn\'t your item')
@@ -386,13 +376,15 @@ def delete_item(request, item_id):
 @login_required
 def generate(request, item_id):
 	# get user from shard
-	user_query = FinderUser.objects
-	set_user_for_sharding(user_query, request.user.id)
-	user = user_query.get(user_id=request.user.id)
+	user = get_user_from_cache(request.user.id)
 	# get item from shard
-	item_query = Item.objects
-	set_user_for_sharding(item_query, request.user.id)
-	item = item_query.get(item_id=item_id)
+	# item_query = Item.objects
+	# set_user_for_sharding(item_query, request.user.id)
+	# item = item_query.get(item_id=item_id)
+	item = get_item_from_cache(item_id, request.user.id) # pass in the user_id as a backup to get the item from the db if it does not exist
+
+	if item is None: # this means the cache doesn't have it and (if we passed in the user_id) the db doesn't have it
+		return flashHomeMessage(request, 'Sorry, we could\'t find an item by that specification')
 
 	if item.owner != user:
 		return flashHomeMessage(request, 'This isn\'t your item')
@@ -419,14 +411,19 @@ def generate(request, item_id):
 def found(request, user_id, item_id):
 	try:
 		# get user from shard
-		user_query = FinderUser.objects
-		set_user_for_sharding(user_query, user_id)
-		user = user_query.get(user_id=user_id)
+		user = get_user_from_cache(request.user.id)
+		
+		if user is None:
+			return flashHomeMessage(request, 'Sorry, we could\'t find a user by that specification')
 		# get item from shard
 		#item = get_object_or_404(Item, item_id=item_id)
-		item_query = Item.objects
-		set_user_for_sharding(item_query, user_id)
-		item = item_query.get(item_id=item_id)
+		# item_query = Item.objects
+		# set_user_for_sharding(item_query, user_id)
+		# item = item_query.get(item_id=item_id)
+		item = get_item_from_cache(item_id, user_id) # pass in the user_id as a backup to get the item from the db if it does not exist
+
+		if item is None: # this means the cache doesn't have it and (if we passed in the user_id) the db doesn't have it
+			return flashHomeMessage(request, 'Sorry, we could\'t find an item by that specification')
 	except FinderUser.DoesNotExist:
 		return flashHomeMessage(request, 'Sorry, we could\'t find a user by that specification')
 	except Item.DoesNotExist:
