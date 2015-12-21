@@ -132,3 +132,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 #MEDIA_URL = '/media/'
 MEDIA_URL = os.path.join(BASE_DIR, "media/")
+
+CACHES = { # for finderuser data and items
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake-sessions', # since we have more than one locmemcache
+        'TIMEOUT': 60*60*24*7*2, # seconds * minutes * hours * days * weeks (total= 2 weeks)
+    }, # not used
+    'users': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake-users', # since we have more than one locmemcache
+        'TIMEOUT': None,
+    },
+    'items': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake-items', # since we have more than one locmemcache
+        'TIMEOUT': None,
+    },
+}
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db' # so that sessions are stored in the cache
