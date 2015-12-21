@@ -8,6 +8,10 @@
     <li><a href="{% url 'my_qrcode:register' %}">Register</a></li>
 {% endblock %}
 
+{% block promo %}
+    <h2>Do you <span>lose</span> your things? Fret not, we <span>find</span> your things! You're welcome.</h2>
+{% endblock %}
+
 {% block content %}
     {% if next %}
         {% if user.is_authenticated %}

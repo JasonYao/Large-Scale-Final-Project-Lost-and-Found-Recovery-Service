@@ -1,11 +1,40 @@
 {% extends "my_qrcode/base.html" %}
 
+{% if message %}
+    <div class="flash-message"><p>{{ message }}</p></div>
+{% endif %}
+
 {% block nav %}
-<a href="{% url 'my_qrcode:login' %}">Log Back In</a> | <a href="{% url 'my_qrcode:home' %}">Home</a>
+    <li><a href="{% url 'my_qrcode:register' %}">Register</a></li>
+{% endblock %}
+
+{% block promo %}
+    <h2>Do you <span>lose</span> your things? Fret not, we <span>find</span> your things! You're welcome.</h2>
 {% endblock %}
 
 {% block content %}
+    {% if next %}
+        {% if user.is_authenticated %}
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+        {% else %}
+        <p>Please login to see this page.</p>
+        {% endif %}
+    {% endif %}
 
-<p>Thanks for using qFindr</p>
+    <form method="post" action={% url 'my_qrcode:login' %}>
+    {% csrf_token %}
+        <form action="{% url 'my_qrcode:login' %}" method="post" id="login_form" class="">
+            {% csrf_token %}
 
+            {% if form.errors %}
+                <p class="error">Your username and password didn't match. Please try again.</p>
+            {% endif %}
+            
+            <input type="text" placeholder="Username" name="username" />
+            <input type="password" placeholder="Password" name="password" />
+            <button type="submit" name="login">Sign In</button>
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>    
+    </form>
 {% endblock %}
