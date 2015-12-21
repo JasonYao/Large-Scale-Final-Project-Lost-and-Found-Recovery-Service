@@ -1,11 +1,15 @@
 from django import forms
-from django.forms import ModelForm, TextInput
+from django.forms import ModelForm, TextInput, PasswordInput
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from my_qrcode.models import Item
 
 class CustomUserCreationForm(UserCreationForm):
-	email = forms.EmailField(required=True) # include the email field
+	#email = forms.EmailField(required=True) # include the email field
+	username = forms.CharField(label="", help_text="", required=True, widget=forms.TextInput(attrs={'placeholder': 'Username',}))
+	email = forms.EmailField(label="", help_text="", required=True, widget=forms.TextInput(attrs={'type': 'email', 'placeholder': 'Email',}))
+	password1 = forms.CharField(label="", help_text="", required=True, widget=PasswordInput(attrs={'placeholder': 'Password',}))
+	password2 = forms.CharField(label="", help_text="", required=True, widget=PasswordInput(attrs={'placeholder': 'Confirm Password',}))
 	
 	class Meta(UserCreationForm.Meta):
 		model = User

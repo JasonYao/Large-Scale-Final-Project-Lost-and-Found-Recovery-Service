@@ -6,9 +6,7 @@
 
 {% block content %}
     <form action="/register/" method="post" id="login_form" class="">
-        {% if form.errors %}
-            <p class="error">Your username and password didn't match. Please try again.</p>
-        {% endif %}
+        {% csrf_token %}
         
         {% if next %}
             {% if user.is_authenticated %}
@@ -18,12 +16,7 @@
             {% endif %}
         {% endif %}
         
-        <!-- {{ form.as_table }} -->
-        <!-- this is a temporary cop out, I should use model form fields, but for now -->
-        <input type="email" placeholder="Email" name="email" />
-        <input type="text" placeholder="Username" name="username" />
-        <input type="password" placeholder="Password" name="password1" />
-        <input type="password" placeholder="Confirm Password" name="password2" />
+        {{ form.as_p }}
         <button type="submit" name="login_button">Register</button>
         <input type="hidden" name="next" value="{{ next }}" />
     </form>
