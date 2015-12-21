@@ -19,7 +19,7 @@ def createFinderUser(user):
 	u.save()
 
 def generate_item_id(user_id):
-	# avash why do we grab all items instead of just one, limit 1
+	# avash: why do we grab all items instead of just one, limit 1
 	# TODO: Fix! Check all items in all shards or keep last item id 
 	# so that we can increment it, unless that doesn't matter
 	last_item = Item.objects.all().order_by('-pk')
@@ -169,8 +169,6 @@ def register(request):
 #####################
 @login_required
 def profile(request):
-	'''List of recent posts by people I follow'''
-
 	user = request.user
 
 	# TODO: a FinderUser is not created when a super user is created, 
@@ -282,8 +280,6 @@ def item(request, user_id, item_id):
 
 @login_required
 def add_item(request):
-	'''List of recent posts by people I follow'''
-
 	user_query = FinderUser.objects
 	set_user_for_sharding(user_query, request.user.id)
 	user = user_query.get(user_id=request.user.id)
@@ -323,8 +319,6 @@ def add_item(request):
 
 @login_required
 def edit_item(request, item_id):
-	'''List of recent posts by people I follow'''
-
 	# get user from shard
 	user_query = FinderUser.objects
 	set_user_for_sharding(user_query, request.user.id)
@@ -361,8 +355,6 @@ def edit_item(request, item_id):
 
 @login_required
 def delete_item(request, item_id):
-	'''List of recent posts by people I follow'''
-
 	# get user from shard
 	user_query = FinderUser.objects
 	set_user_for_sharding(user_query, request.user.id)
@@ -391,7 +383,6 @@ def delete_item(request, item_id):
 
 @login_required
 def generate(request, item_id):
-
 	# get user from shard
 	user_query = FinderUser.objects
 	set_user_for_sharding(user_query, request.user.id)
@@ -424,7 +415,6 @@ def generate(request, item_id):
 	return render(request, 'my_qrcode/generate.html', context)
 
 def found(request, user_id, item_id):
-
 	try:
 		# get user from shard
 		user_query = FinderUser.objects
