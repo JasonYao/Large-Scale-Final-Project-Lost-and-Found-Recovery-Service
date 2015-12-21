@@ -2,19 +2,23 @@
 {% load humanize %}
 {% load staticfiles %}
 
-{% block nav %}
-{% endblock %}
+{% block bcss %}inside{% endblock %}
 
 {% block content %}
 <div>
-  <p>Profile of user: {{ user.username }}</p>
+    <h3>Profile of user: {{ user.username }}</h3>
+    <table>
+        <tr>
+            <th>Item Name</th>
+        </tr>
+        {% for item in items %}
+            {% if item.is_public %}
+            <tr>
+                <td class="menued {% if item.status == 'L' %}lost{% endif %}">{{ item.name }}</td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
 
-  <ul>
-  	{% for item in items %}
-		{% if item.is_public %}
-			<li>{{ item.name }}</li>
-		{% endif %}
-  	{% endfor %}
-  </ul>
 </div>
 {% endblock %}

@@ -2,15 +2,17 @@
 {% load humanize %}
 {% load staticfiles %}
 
+{% block bcss %}inside{% endblock %}
+
 {% block nav %}
-<a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
+    <li><a href="{% url 'my_qrcode:profile' %}">Profile</a></li>
+    <li><a href="{% url 'my_qrcode:logout' %}">Log Out</a></li>
 {% endblock %}
 
 {% block content %}
 <div>
-  <h1>Print the QR Image</h1>
-  <p>
-  	<img src="{{ qr_image_source_url }}" />
-  </p>
+    <h3>Your QR Image</h3>
+    <p>Print this and place in on the item you wish to track.</p>
+    <img src="{{ qr_image_source_url }}" />
 </div>
 {% endblock %}

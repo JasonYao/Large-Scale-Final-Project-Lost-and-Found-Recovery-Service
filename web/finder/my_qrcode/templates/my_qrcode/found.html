@@ -2,15 +2,13 @@
 {% load humanize %}
 {% load staticfiles %}
 
-{% block nav %}
-<a href="{% url 'my_qrcode:profile' %}">Profile</a> | <a href="{% url 'my_qrcode:logout' %}">Log Out</a>
-{% endblock %}
+{% block bcss %}inside{% endblock %}
 
 {% block content %}
 <div>
-  <h1>Thank You for returning <i>{{ item.name }}</i></h1>
-  <p>
-  	Please contact the user "{{ user.username }}" at "{{ user.email }}" for more instructions on how to return the item
-  </p>
+  <h3>You found <em>{{ item.name }}</em>, an item that belongs to <em>{{ user.username }}</em>".</h3>
+  <p>Please contact <strong>{{ user.username }}</strong> at <strong>{{ user.email }}</strong> for more instructions 
+  on how to return the item.</p>
+  <p>You know it is the right thing to do.</p>
 </div>
 {% endblock %}
