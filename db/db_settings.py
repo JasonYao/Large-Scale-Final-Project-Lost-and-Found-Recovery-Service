@@ -9,7 +9,7 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
-    'db1': {
+    'finder1': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'finder',
         'USER': 'finder',
@@ -17,7 +17,7 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
-    'db2': {
+    'finder2': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'finder',
         'USER': 'finder',
