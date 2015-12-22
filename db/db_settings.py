@@ -36,7 +36,7 @@ DATABASES['default'] = {
     'HOST': '',
     'PORT': '',
 }
-DATABASES['auth_db'] = DATABASES['db1'] = DATABASES['db'] = DATABASES['default']
+DATABASES['auth_db'] = DATABASES['db1'] = DATABASES['db2'] = DATABASES['default']
 
 # Database routers go here:
 DATABASE_ROUTERS = ['my_qrcode.routers.UserRouter']

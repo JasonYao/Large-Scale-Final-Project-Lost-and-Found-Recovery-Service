@@ -431,8 +431,9 @@ def found(request, user_id, item_id):
 		#item = get_object_or_404(Item, item_id=item_id)
 		# item_query = Item.objects
 		# set_user_for_sharding(item_query, user_id)
-		# item = item_query.get(item_id=item_id)
-		item = get_item_from_cache(item_id, user_id) # pass in the user_id as a backup to get the item from the db if it does not exist
+		item = item_query.get(item_id=item_id)
+		# item = get_item_from_cache(item_id, user_id) # pass in the user_id as a backup to get the item from the db if it does not exist
+		#set_user_for_sharding(item_query, user_id)
 
 		if item is None: # this means the cache doesn't have it and (if we passed in the user_id) the db doesn't have it
 			return flashHomeMessage(request, 'Sorry, we could\'t find an item by that specification')
