@@ -34,9 +34,9 @@ def logical_to_physical(logical):
     raise Exception("shard out of bounds %d" % logical)
   #return LOGICAL_TO_PHYSICAL[logical] 
   if logical % NUM_PHYSICAL_SHARDS == 0:
-    return 'db1'
+    return 'finder1'
   else:
-    return 'db2'
+    return 'finder2'
  
 def logical_shard_for_user(user_id):
   print "Looking for shard for user %d" % user_id
