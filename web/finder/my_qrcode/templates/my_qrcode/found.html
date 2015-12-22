@@ -6,8 +6,8 @@
 
 {% block content %}
 <div>
-  <h3>You found <em>{{ item.name }}</em>, an item that belongs to <em>{{ user.username }}</em>.</h3>
-  <p>Please contact <strong>{{ user.username }}</strong> at <strong>{{ user.email }}</strong> for more instructions 
+  <h3>You found <em>{{ item.name }}</em>, an item that belongs to <em>{{ item.owner.username }}</em>.</h3>
+  <p>Please contact <strong>{{ item.owner.username }}</strong> at <strong>{{ item.owner.email }}</strong> for more instructions 
   on how to return the item.</p>
   <p>You know it is the right thing to do.</p>
 </div>
