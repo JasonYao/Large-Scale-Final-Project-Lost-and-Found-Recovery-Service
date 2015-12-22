@@ -415,7 +415,8 @@ def generate(request, item_id):
 		'item_id': item_id,
 		'qr_url': qr_uri,
 		#'qr_image_source_url': settings.MEDIA_URL + qr_filename,
-		'qr_image_source_url': reverse('my_qrcode:generate_qr', args=(item_id)),
+		#'qr_image_source_url': reverse('my_qrcode:generate_qr', args=(str(item_id))),
+		'qr_image_source_url': '/generate_qr_image/' + str(item_id),
 		'cache_timeout': 2419200, # 4 weeks in seconds
 	}
 	return render(request, 'my_qrcode/generate.html', context)
