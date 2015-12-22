@@ -30,6 +30,6 @@ urlpatterns = [
     url(r'^items/(?P<item_id>[0-9]+)/delete/$', views.delete_item, name='item_delete'),
     url(r'^generate/(?P<item_id>[0-9]+)/$', views.generate, name='generate'),
     url(r'^found/(?P<user_id>[0-9]+)/(?P<item_id>[0-9]+)/$', views.found, name='found'),
-    url(r'^generate_qr_image/(?P<item_id>[0-9]+)/$', views.generate_qr_image, name='generate_qr'),
+    url(r'^generate_qr_image/(?P<item_id>\d+)/$', views.generate_qr_image, name='generate_qr'),
     url('^', include('django.contrib.auth.urls')),
 ]
