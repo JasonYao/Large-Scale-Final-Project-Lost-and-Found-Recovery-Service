@@ -424,7 +424,8 @@ def generate(request, item_id):
 def found(request, user_id, item_id):
 	try:
 		# get user from shard
-		user = get_user_from_cache(request.user.id)
+		#user = get_user_from_cache(request.user.id)
+		user = get_user_from_cache(user_id)
 		
 		if user is None:
 			return flashHomeMessage(request, 'Sorry, we could\'t find a user by that specification')
