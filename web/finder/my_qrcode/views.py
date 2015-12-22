@@ -467,7 +467,7 @@ def generate_qr_image(request, item_id):
 
 	# this is where we'll create the qrcode
 	# make this the full site url, for now leave it as this dummy url
-	qr_url = '/found/' + str(user.user_id) + '/' + str(item_id) + '/' 
+	qr_url = '/found/' + str(item.owner.user_id) + '/' + str(item_id) + '/' 
 	
 	qr_uri = request.build_absolute_uri(qr_url) # the full absolute uri to be sent to the qrcode app
 
