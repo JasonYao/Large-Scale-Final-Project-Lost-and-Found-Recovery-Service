@@ -1,8 +1,8 @@
 # Lost & Found Recovery Service
-
 By Daniel Balagula, Chisom Mba, Avash Rao, and Jason Yao
 
 ## Description
+Demo website: http://54.165.38.12/
 
 This repository is for our final project in CSCI-UA 480 Large Scalability, and is to contain all planning documents, 
 the development pipeline setup scripts, along with the actual codebase for our application.
@@ -22,7 +22,6 @@ The application implements an anonymous lost & found service, where:
 	- Application will co-ordinate return of the lost item (simulated)
 
 ## Goals
-
 - Create a full-fledged scalable web application
 
 - Showcase security & scalability in design & planning of application
@@ -42,7 +41,6 @@ The application implements an anonymous lost & found service, where:
 - wheel==0.24.0
 
 ## Technology Stack
-
 Tech Stack Design (metal up):
  
 	[Operating System]	Ubuntu 14.04 x86_64
@@ -56,5 +54,4 @@ Tech Stack Design (metal up):
 	[Relational Database]	MySQL
 
 ## License
-
 This repository is licensed under the GNU General Public License (v2), found [here](LICENSE)
